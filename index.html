@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <title>Gøy</title>
@@ -9,110 +10,129 @@
         }
     </style>
 </head>
+
 <body style="background-color: #424144">
-<canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas" width="500" height="500"></canvas>
 
-<script>
+    <script>
 
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext('2d');
+        var canvas = document.getElementById("canvas");
+        var context = canvas.getContext('2d');
 
-    var canvasWidth = canvas.width;
-    var canvasHeight = canvas.height;
+        var canvasWidth = canvas.width;
+        var canvasHeight = canvas.height;
 
-    var angle = 0;
+        var angle = 0;
 
-    var requestAnimationFrame = window.requestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.msRequestAnimationFrame;
-
-
-
-    var xpos = canvasWidth/2;
-    var ypos = canvasHeight/2;
-
-    var color = getRandomColor();
-
-    var amountOfBallsWithSameColor = 0;
-
-    function drawCircle() {
-        // context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-        if (amountOfBallsWithSameColor >= 50) {
-            amountOfBallsWithSameColor = 0;
-            color = getRandomColor();
-        }
-
-
-        // draw the circle
-        context.beginPath();
-
-        var radius = 10 + 15 * Math.abs(Math.sin(angle));
-
-        xpos += Math.random()*radius - radius/2;
-        ypos += Math.random()*radius - radius/2;
-
-        if (xpos < radius) {
-            xpos = radius;
-        }
-        if (xpos > canvasWidth-radius) {
-            xpos = canvasWidth-radius;
-        }
-        if (ypos < radius) {
-            ypos = radius;
-        }
-        if (ypos > canvasHeight-radius) {
-            ypos = canvasHeight-radius;
-        }
-
-
-        console.log('xpos: ' + xpos + ' | ypos: ' + ypos);
-
-        // context.rect(0,0, 100, 100);
-        context.arc(xpos, ypos, radius, 0, Math.PI * 2, false);
-        context.closePath();
-
-        // color in the circle
-        context.fillStyle = nextColor(color);
-        context.fill();
-
-        amountOfBallsWithSameColor++;
-
-        angle += Math.PI / 64;
+        var requestAnimationFrame = window.requestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.msRequestAnimationFrame;
 
 
 
-        requestAnimationFrame(drawCircle);
-    }
+        var xpos = canvasWidth / 2;
+        var ypos = canvasHeight / 2;
+
+        var color = getRandomColor();
+
+        var clearPos = 0;
+
+        var amountOfBallsWithSameColor = 0;
+
+        function drawCircle() {
+            // context.clearRect(xpos, 0, 1, canvasHeight);
 
 
-    drawCircle();
-
-    function getRandomColor() {
-        return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
-    }
-
-    function nextColor(color) {
-        color = color.substr(1,6);
-        var letters = '0123456789ABCDEF';
-        var colorType = (2 * Math.floor(Math.random() * 3)) + 2;
-
-        var newColor = '#';
-
-        for (var i=0; i < 6 ; i++) {
-            if (!(i === colorType)) {
-                newColor += color[i];
-            } else {
-                var colorIndex = (color.indexOf(color.substr(colorType, 1))+1) % 16;
-
-                newColor += letters[colorIndex];
+            if (amountOfBallsWithSameColor >= 50) {
+                amountOfBallsWithSameColor = 0;
+                color = getRandomColor();
             }
-        }
-        console.log(newColor);
-        return newColor;
-    }
 
-</script>
+            clearPos += 2;
+            if (clearPos > canvasWidth) {
+                clearPos = -5;
+            }
+
+            // draw the circle
+            context.beginPath();
+
+            var radius = 10 + 40 * Math.abs(Math.sin(angle));
+
+            if (radius <= 15) {
+
+                var k = 8;
+
+                xpos += Math.random() * radius * k - radius * k/2;
+                ypos += Math.random() * radius * k - radius * k/2;
+
+                if (xpos < radius) {
+                    xpos = radius;
+                }
+                if (xpos > canvasWidth - radius) {
+                    xpos = canvasWidth - radius;
+                }
+                if (ypos < radius) {
+                    ypos = radius;
+                }
+                if (ypos > canvasHeight - radius) {
+                    ypos = canvasHeight - radius;
+                }
+            }
+
+
+            console.log('xpos: ' + xpos + ' | ypos: ' + ypos);
+
+            // context.rect(0,0, 100, 100);
+            context.arc(xpos, ypos, radius, 0, Math.PI * 2, false);
+            context.closePath();
+
+            // color in the circle
+            context.fillStyle = nextColor(color);
+            context.fill();
+
+            amountOfBallsWithSameColor++;
+
+            angle += Math.PI / 64;
+
+
+
+            requestAnimationFrame(drawCircle);
+        }
+
+
+        drawCircle();
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function nextColor(color) {
+            color = color.substr(1, 6);
+            var letters = '0123456789ABCDEF';
+            var colorType = (2 * Math.floor(Math.random() * 3)) + 2;
+
+            var newColor = '#';
+
+            for (var i = 0; i < 6; i++) {
+                if (!(i === colorType)) {
+                    newColor += color[i];
+                } else {
+                    var colorIndex = (color.indexOf(color.substr(colorType, 1)) + 1) % 16;
+
+                    newColor += letters[colorIndex];
+                }
+            }
+            console.log(newColor);
+            return newColor;
+        }
+
+    </script>
 </body>
+
 </html>
