@@ -13,7 +13,34 @@
 
 <body style="background-color: #424242">
     <canvas id="canvas" width="500" height="500"></canvas>
-    <script src="illuminati.js"></script>
+    <script>
+        var scripts = [
+            'illuminati.js',
+            'colorful_records.js',
+            'black_shapes_surrounded_by_colors.js'
+        ];
+
+        loadRandomScript();
+
+        function loadRandomScript() {
+            var scriptIndex = Math.floor(Math.random() * scripts.length);
+            loadScript(scripts[scriptIndex]);
+        }
+
+        function loadScript(location) {
+            // Check for existing script element and delete it if it exists
+            var js = document.getElementById("script");
+            if(js) {
+                document.body.removeChild(js);
+            }
+
+            // Create new script element and load a script into it
+            js = document.createElement("script");
+            js.src = location;
+            js.id = 'script';
+            document.body.appendChild(js);
+        }
+    </script>
 </body>
 
 </html>
