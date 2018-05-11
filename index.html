@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Gøy</title>
+    <title>Hey there cowboy</title>
     <style>
         #canvas {
             background-color: #000000;
@@ -13,57 +13,7 @@
 
 <body style="background-color: #424242">
     <canvas id="canvas" width="500" height="500"></canvas>
-
-    <script>
-        var canvas = document.getElementById("canvas");
-        var context = canvas.getContext('2d');
-
-        var angle = 0;
-
-        var canvasWidth = canvas.width;
-        var canvasHeight = canvas.height;
-
-        var requestAnimationFrame = window.requestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.msRequestAnimationFrame;
-
-        var xpos = canvasWidth/2;
-        var ypos = canvasHeight/2;
-
-        function draw() {
-            context.clearRect(0, 0, canvasWidth, canvasHeight);
-            context.beginPath();
-
-            var k = Math.abs(Math.sin(angle));
-
-            context.translate(k*10, k*10);
-            context.rect(xpos, ypos, 50*k, 50*k);
-            context.rotate(10);
-
-            context.closePath();
-
-            // color in the circle
-            context.fillStyle = getRandomColor();
-
-
-            context.fill();
-
-            angle += Math.PI / 64;
-
-            requestAnimationFrame(draw);
-        }
-        draw();
-
-        function getRandomColor() {
-            var letters = '0123456789ABCDEF';
-            var color = '#';
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-    </script>
+    <script src="illuminati.js"></script>
 </body>
 
 </html>
