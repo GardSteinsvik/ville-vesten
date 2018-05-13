@@ -12,15 +12,18 @@
 </head>
 
 <body style="background-color: #424242">
-    <canvas id="canvas" width="500" height="500"></canvas>
+    <canvas id="canvas" width="750" height="750"></canvas>
+    <script src="objects/circle.js"></script>
     <script>
         var scripts = [
             'illuminati.js',
             'colorful_records.js',
-            'black_shapes_surrounded_by_colors.js'
+            'black_shapes_surrounded_by_colors.js',
+            'jumping_gradient_balls.js'
         ];
 
         loadRandomScript();
+        // loadScript('experiment.js');
 
         function loadRandomScript() {
             var scriptIndex = Math.floor(Math.random() * scripts.length);
@@ -28,16 +31,15 @@
         }
 
         function loadScript(location) {
-            // Check for existing script element and delete it if it exists
-            var js = document.getElementById("script");
+            var scriptName = "loaded_script";
+            var js = document.getElementById(scriptName);
             if(js) {
                 document.body.removeChild(js);
             }
 
-            // Create new script element and load a script into it
             js = document.createElement("script");
             js.src = location;
-            js.id = 'script';
+            js.id = scriptName;
             document.body.appendChild(js);
         }
     </script>
