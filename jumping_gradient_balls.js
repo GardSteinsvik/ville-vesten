@@ -29,9 +29,8 @@ for (var i = 0; i < 150; i++) {
 
     var color = getRandomColor();
 
-    for (var j = 0; j < AMOUNT_IN_CIRCLE_GROUP; j++) {
-        color = nextSmoothColor(color);
-        circleGroup.push(new Circle(x, y, (AMOUNT_IN_CIRCLE_GROUP - j)*5, color));
+    for (var j = AMOUNT_IN_CIRCLE_GROUP-1; j >= 0; j--) {
+        circleGroup.unshift(new Circle(x, y, (AMOUNT_IN_CIRCLE_GROUP - j)*5, getRandomColor()));
     }
 
     circles.push(circleGroup);
