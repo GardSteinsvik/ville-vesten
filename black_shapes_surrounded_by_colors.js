@@ -3,16 +3,16 @@ var context = canvas.getContext('2d');
 
 var angle = 0;
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+
+
 
 var requestAnimationFrame = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame;
 
-var xpos = canvasWidth/2;
-var ypos = canvasHeight/2;
+var xpos = canvas.width/2;
+var ypos = canvas.height/2;
 
 var color = getRandomColor();
 context.translate(xpos,ypos);
@@ -27,7 +27,7 @@ function draw() {
 
     if ((radius - minRadius) < 0.0001) {
         resetTransform(context);
-        context.clearRect(0, 0, canvasWidth, canvasHeight);
+        context.clearRect(0, 0, canvas.width, canvas.height);
         context.translate(xpos,ypos);
 
         // color = nextColor(color);

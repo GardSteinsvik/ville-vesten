@@ -3,16 +3,16 @@ var context = canvas.getContext('2d');
 
 var angle = 0;
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+
+
 
 var requestAnimationFrame = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame;
 
-var xpos = canvasWidth/2;
-var ypos = canvasHeight/2;
+var xpos = canvas.width/2;
+var ypos = canvas.height/2;
 
 var color = getRandomColor();
 context.translate(xpos,ypos);

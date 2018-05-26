@@ -1,11 +1,6 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
-
-
-
 var requestAnimationFrame = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
@@ -31,7 +26,10 @@ generateObject();
 
 drawFrame();
 function drawFrame() {
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    vpX = canvas.width / 2;
+    vpY = canvas.height / 2;
 
     circles.forEach(move);
     circles.forEach(colorize);

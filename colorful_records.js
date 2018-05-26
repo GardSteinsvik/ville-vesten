@@ -1,8 +1,8 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+
+
 
 var angle = 0;
 
@@ -11,8 +11,8 @@ var requestAnimationFrame = window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame;
 
-var xpos = canvasWidth / 2;
-var ypos = canvasHeight / 2;
+var xpos = canvas.width / 2;
+var ypos = canvas.height / 2;
 
 var color = getRandomColor();
 
@@ -21,7 +21,7 @@ var clearPos = 0;
 var amountOfBallsWithSameColor = 0;
 
 function drawCircle() {
-    // context.clearRect(0, 0, canvasWidth, canvasHeight);
+    // context.clearRect(0, 0, canvas.width, canvas.height);
 
     if (amountOfBallsWithSameColor >= 50) {
         amountOfBallsWithSameColor = 0;
@@ -29,7 +29,7 @@ function drawCircle() {
     }
 
     clearPos += 2;
-    if (clearPos > canvasWidth) {
+    if (clearPos > canvas.width) {
         clearPos = -5;
     }
 
@@ -48,14 +48,14 @@ function drawCircle() {
         if (xpos < radius) {
             xpos = radius;
         }
-        if (xpos > canvasWidth - radius) {
-            xpos = canvasWidth - radius;
+        if (xpos > canvas.width - radius) {
+            xpos = canvas.width - radius;
         }
         if (ypos < radius) {
             ypos = radius;
         }
-        if (ypos > canvasHeight - radius) {
-            ypos = canvasHeight - radius;
+        if (ypos > canvas.height - radius) {
+            ypos = canvas.height - radius;
         }
     }
 

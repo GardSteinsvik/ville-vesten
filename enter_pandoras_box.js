@@ -1,8 +1,8 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+
+
 
 
 
@@ -12,7 +12,7 @@ var requestAnimationFrame = window.requestAnimationFrame ||
     window.msRequestAnimationFrame;
 
 
-var radius = 17;
+var radius = 20;
 
 var colorIndex = 0;
 var colors = [
@@ -37,7 +37,10 @@ generateObjects();
 
 drawFrame();
 function drawFrame() {
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    vpX = canvas.width / 2;
+    vpY = canvas.height / 2;
 
     angle += Math.PI/64;
     var variation = MIN_RADIUS + MAX_RADIUS * Math.sin(angle);
@@ -65,10 +68,10 @@ function generateObjects() {
 
     for (var i = 0; i < rows-1; i++) {
         ypos = -vpY;
-        xpos += canvasWidth/rows;
+        xpos += canvas.width/rows;
 
         for (var j = 0; j < cols-1; j++) {
-            ypos += canvasHeight/cols;
+            ypos += canvas.height/cols;
 
             var color = colors[colorIndex];
             circles.unshift(new Object3d(xpos, ypos, radius, color));

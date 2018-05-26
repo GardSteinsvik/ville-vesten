@@ -1,8 +1,8 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var canvasWidth = canvas.width;
-var canvasHeight = canvas.height;
+
+
 
 var angle = 0;
 
@@ -11,8 +11,8 @@ var requestAnimationFrame = window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame;
 
-var xpos = canvasWidth / 2;
-var ypos = canvasHeight / 2;
+var xpos = canvas.width / 2;
+var ypos = canvas.height / 2;
 
 var MIN_RADIUS = 0;
 var MAX_RADIUS = 10;
@@ -22,8 +22,8 @@ var circles = [];
 for (var i = 0; i < 150; i++) {
     var circleGroup = [];
 
-    var x = Math.random() * canvasWidth;
-    var y = Math.random() * canvasHeight;
+    var x = Math.random() * canvas.width;
+    var y = Math.random() * canvas.height;
 
     var AMOUNT_IN_CIRCLE_GROUP = 6;
 
@@ -39,16 +39,16 @@ for (var i = 0; i < 150; i++) {
 
 drawFrame();
 function drawFrame() {
-    context.clearRect(0, 0, canvasWidth, canvasHeight);
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     var radius = MIN_RADIUS + MAX_RADIUS * Math.abs(Math.tan(angle));
 
     this.circles.forEach(function (circles) {
         var newX;
         var newY;
-        if (radius > canvasWidth) {
-            newX = Math.random() * canvasWidth;
-            newY = Math.random() * canvasHeight;
+        if (radius > canvas.width) {
+            newX = Math.random() * canvas.width;
+            newY = Math.random() * canvas.height;
         }
         circles.forEach(function (circle) {
             circle.radius = circle.baseRadius + radius;

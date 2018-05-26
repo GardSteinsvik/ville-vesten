@@ -25,6 +25,12 @@
         var canvas = document.getElementById("canvas");
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
+        window.onresize = function (ev) {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+
         var scripts = [
             'illuminati.js',
             'colorful_records.js',
@@ -34,8 +40,8 @@
             'spiral_of_doom.js'
         ];
 
-        loadRandomScript();
-        // loadScript('experiment.js');
+        // loadRandomScript();
+        loadScript('experiment.js');
 
         function loadRandomScript() {
             var scriptIndex = Math.floor(Math.random() * scripts.length);
