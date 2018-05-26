@@ -8,6 +8,12 @@
         #canvas {
             background-color: #000000;
         }
+        body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -16,6 +22,9 @@
     <script src="objects/circle.js"></script>
     <script src="objects/object3d.js"></script>
     <script>
+        var canvas = document.getElementById("canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         var scripts = [
             'illuminati.js',
             'colorful_records.js',
@@ -24,8 +33,8 @@
             'enter_pandoras_box.js'
         ];
 
-        loadRandomScript();
-        // loadScript('experiment.js');
+        // loadRandomScript();
+        loadScript('experiment.js');
 
         function loadRandomScript() {
             var scriptIndex = Math.floor(Math.random() * scripts.length);

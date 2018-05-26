@@ -55,7 +55,6 @@ function drawFrame() {
     if (!circles[circles.length-1].visible) {
         var amountOfCirclesInGrid = (rows-1)*(cols-1);
         circles.splice(circles.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
-        console.log('sponk');
     }
     requestAnimationFrame(drawFrame);
 }

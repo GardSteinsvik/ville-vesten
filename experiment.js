@@ -12,8 +12,6 @@ var requestAnimationFrame = window.requestAnimationFrame ||
     window.msRequestAnimationFrame;
 
 
-var radius = 17;
-
 var colorIndex = 0;
 var colors = [
     '#46daff',
@@ -21,11 +19,7 @@ var colors = [
     '#ffe454'
 ];
 
-var angle = 0;
-var MIN_RADIUS = 0;
-var MAX_RADIUS = 150;
-
-var rows = 11, cols = 11;
+var theta = 0;
 
 var fl = 250;
 var vpX = canvas.width / 2;
@@ -33,48 +27,37 @@ var vpY = canvas.height / 2;
 
 var circles = [];
 
-generateObjects();
+generateObject();
 
 drawFrame();
 function drawFrame() {
     context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-    angle += Math.PI/64;
-    var variation = MIN_RADIUS + MAX_RADIUS * Math.sin(angle);
-    fl = 250 + variation;
 
     circles.forEach(move);
     circles.forEach(colorize);
 
     circles.forEach(draw);
 
-    if (circles[0].zpos % 650 === 0) {
-        generateObjects();
-    }
+    generateObject();
 
     if (!circles[circles.length-1].visible) {
-        var amountOfCirclesInGrid = (rows-1)*(cols-1);
-        circles.splice(circles.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
-        console.log('sponk');
+        circles.pop();
     }
     requestAnimationFrame(drawFrame);
 }
 
-function generateObjects() {
-    var xpos = -vpX;
-    var ypos = -vpY;
+function generateObject() {
+    var distanceFromCenter = 100;
 
-    for (var i = 0; i < rows-1; i++) {
-        ypos = -vpY;
-        xpos += canvasWidth/rows;
+    var xpos = distanceFromCenter * Math.cos(theta*theta/10);
+    var ypos = distanceFromCenter * Math.sin(theta*theta/10);
 
-        for (var j = 0; j < cols-1; j++) {
-            ypos += canvasHeight/cols;
+    theta += .1;
 
-            var color = colors[colorIndex];
-            circles.unshift(new Object3d(xpos, ypos, radius, color));
-        }
-    }
+    var radius = 25;
+    var color = '#000000';
+    circles.unshift(new Object3d(xpos, ypos, radius, color));
+
 }
 
 function move(object) {
@@ -95,7 +78,8 @@ function move(object) {
 
 function colorize(object) {
     if (object.zpos % 100 === 0) {
-        object.color = colors[++object.colorIndex%colors.length];
+        // object.color = colors[++object.colorIndex%colors.length];
+        object.color = hslToRgb(theta/10%1, 1, .5);
     }
 }
 
@@ -141,6 +125,43 @@ function nextSmoothColor(color) {
         var nextIndex = (letters.indexOf(color.charAt(i)) + 1) % letters.length;
         newColor += letters[nextIndex];
     }
-    // console.log(newColor);
     return newColor;
+}
+
+function hslToRgb(h, s, l){
+    var r, g, b;
+
+    if(s === 0){
+        r = g = b = l; // achromatic
+    }else{
+        var hue2rgb = function hue2rgb(p, q, t){
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    var resColor = "#";
+    resColor += getHex(r);
+    resColor += getHex(g);
+    resColor += getHex(b);
+    return resColor;
+}
+
+function getHex(c) {
+    var res = Math.round(c * 255).toString(16);
+    if (res.length < 2) {
+        res = '0'+res;
+    }
+
+    return res;
 }
