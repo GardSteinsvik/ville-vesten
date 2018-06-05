@@ -86,8 +86,8 @@ const fargefunk = (i) => rgb(ccc.r[i] = rfunk(ccc.r[i]),
                              ccc.b[i] = rfunk(ccc.b[i]))
 
 const dytt = pi/4.0;
-const cw = ccc.cw;
-const ch = ccc.ch;
+const cw = canvas.width;
+const ch = canvas.height;
 function updatefunk(t) {
   ctx.clearRect(0, 0, cw, ch);
   let tt = t/1000.0;

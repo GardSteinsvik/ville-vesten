@@ -62,7 +62,7 @@
          js.src = location;
          js.id = scriptName;
          document.body.appendChild(js);
-         document.title = location;
+         document.title = location.slice(0, -3);
      }
     </script>
 </body>
