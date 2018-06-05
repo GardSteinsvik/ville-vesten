@@ -88,6 +88,7 @@ class Sprite {
         let y = i + oy;
         let c = this.data[i*this.width + j]*14;
         var nifarge = (c + ifarge) % kossfarge.length;
+
         nifarge = nifarge || nifarge + 1;
 
         this.ccc.setcolor(x, y, c ? nifarge : 0);
@@ -129,8 +130,7 @@ function lerpcolor(a, b, n = 10) {
     let ai = abi[0];
     let bi = abi[1];
 
-    // eh blir 1 mer
-    for (let i = 0; i <= n; i++) {
+    for (let i = 0; i < n; i++) {
       let ni = [0, 0, 0]
 
       ni[0] = Math.floor((1 - i/n)*ai[0] + (i/n)*bi[0]);
@@ -150,8 +150,6 @@ function lerpcolor(a, b, n = 10) {
   return ab;
 }
 
-// lag et ccc.eobject, med en bounceting
-
 const farge = [
   ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
   ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
@@ -164,7 +162,6 @@ const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
 const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`
 const grense = (a, x, b) => Math.min(Math.max(x, a), b)
 const fargegrense = (x) => grense(0, x, 255);
-// const fargefunk = (fff) => ([rgb(0, 0, 0)]).concat(fff.concat(fff.slice(0, -2).reverse()))
 const fargefunk = (fff) => fff.concat(fff.slice(0, -1).reverse())
 const wowfarge = (fff) => fff.map(() => fff[_.random(fff.length - 1)])
 const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => fff[_.random(fff.length - 1)])
@@ -210,18 +207,13 @@ const mmm = 20;
 const zzz = mmm*2;
 
 var kossfarge = _.random(1) ?
-    repfarge(farge[Math.floor(farge.length*Math.random())], zzz*2 - 1) :
+    repfarge(farge[_.random(farge.length - 1)], zzz*2 - 1) :
     fargefunk(genfarge(zzz));
 
 var ifarge = 0;
 
-// ohoi
+// ???
 var r = 19.0;
-// const canvas = document.getElementsByTagName("canvas")[0];
-// canvas.width  = cw;
-// canvas.height = ch;
-// canvas.style.width  = cw + "px";
-// canvas.style.height = ch + "px";
 
 var sulten = false;
 var lerpliste = [];
