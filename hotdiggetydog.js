@@ -14,12 +14,15 @@ const cos = Math.cos;
 //  { i: 40, f: op }]
 
 class Celledings {
-  constructor(hvorstor = 4, margin = 2, w = 600, h = 600) {
+  constructor(hvorstor, margin, w, h) {
     this.hvorstor = hvorstor;
     this.margin   = margin;
     this.total    = this.hvorstor + this.margin;
-    this.cw = w + w % this.total;
-    this.ch = h + h % this.total;
+
+    this.w  = w || window.innerWidth  - (this.total);
+    this.h  = h || window.innerHeight - (this.total);
+    this.cw = this.w + this.w % this.total;
+    this.ch = this.h + this.h % this.total;
 
     this.perrad = Math.floor(this.cw/this.total);
     this.perkol = Math.floor(this.ch/this.total);
@@ -44,17 +47,11 @@ class Celledings {
   }
 }
 
-
-const kossfarge = ["#793fcf", "#df2aac", "#ff4b80", "#ff885c", "#ffc350", "#f9f871"]
-const ccc = new Celledings(6, 2, window.innerWidth - 8, window.innerHeight - 8);
+let size   = 10;
+let margin =  2;
+var ccc = new Celledings(size, margin);
 const rrr = 6.0;
-// const canvas = document.getElementsByTagName("canvas")[0];
 const ctx = canvas.getContext("2d", { alpha: false })
-
-// canvas.width  = ccc.cw;
-// canvas.height = ccc.ch;
-// canvas.style.width  = ccc.cw + "px";
-// canvas.style.height = ccc.ch + "px";
 
 const end = 2*pi
 function sirkeldings(x, y, r, color = "#fff") {
@@ -86,10 +83,8 @@ const fargefunk = (i) => rgb(ccc.r[i] = rfunk(ccc.r[i]),
                              ccc.b[i] = rfunk(ccc.b[i]))
 
 const dytt = pi/4.0;
-const cw = canvas.width;
-const ch = canvas.height;
 function updatefunk(t) {
-  ctx.clearRect(0, 0, cw, ch);
+  ctx.clearRect(0, 0, ccc.w, ccc.h);
   let tt = t/1000.0;
   
   for (let i = 0; i < ccc.alle; i += 1) {
@@ -151,3 +146,9 @@ const cup = (a, b) => Math.min(a,  b);
 const cap = (a, b) => Math.max(a,  b);
 const cut = (a, b) =>      cap(a, -b);
 
+window.onresize = () => {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  rect = canvas.getBoundingClientRect();
+  ccc = new Celledings(size, margin);
+}

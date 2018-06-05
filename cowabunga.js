@@ -31,15 +31,20 @@ class Musedings {
 }
 
 class Celledings {
-  constructor(hvorstor = 4, margin = 2, w = 600, h = 600) {
+  constructor(hvorstor, margin, w, h) {
     this.hvorstor = hvorstor;
     this.margin   = margin;
     this.total    = this.hvorstor + this.margin;
-    this.cw = w + w % this.total;
-    this.ch = h + h % this.total;
+
+    this.w  = w || window.innerWidth  - (this.total);
+    this.h  = h || window.innerHeight - (this.total);
+    this.cw = this.w + this.w % this.total;
+    this.ch = this.h + this.h % this.total;
+
     this.perrad = Math.floor(this.cw/this.total);
     this.perkol = Math.floor(this.ch/this.total);
     this.alle = this.perrad*this.perkol;
+    
     this.x = new Int32Array(this.alle);
     this.y = new Int32Array(this.alle);
     this.fx = new Float32Array(this.alle);
@@ -185,7 +190,9 @@ const mapkey = (f, o) => Object.keys(o).reduce((ny, k) => {
   return ny;
 }, {});
 
-const ccc = new Celledings(6, 6, window.innerWidth - 12, window.innerHeight - 12);
+let hvorstor = 6;
+let margin   = 6;
+var ccc = new Celledings(hvorstor, margin);
 const sss = new Sprite(varitsprite, 5, 7, ccc);
 
 const cw = ccc.cw;
@@ -258,7 +265,7 @@ const ctx = canvas.getContext("2d", { alpha: false });
 ctx.scale(devicePixelRatio, devicePixelRatio);
 
 const updatefunk = () => {
-  ctx.clearRect(0, 0, cw, ch);
+  ctx.clearRect(0, 0, ccc.cw, ccc.ch);
 
   for (let i = 0; i < ccc.alle; i += 1) {
     if (ccc.state[i] > 0) {
@@ -496,3 +503,10 @@ const rotsanic = (ox, oy, px, py, rad) => {
 
   return [x + ox, y + oy]
 };
+
+window.onresize = () => {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  rect = canvas.getBoundingClientRect();
+  ccc = new Celledings(hvorstor, margin);
+}
