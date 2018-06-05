@@ -53,12 +53,12 @@ var ccc = new Celledings(size, margin);
 const rrr = 6.0;
 const ctx = canvas.getContext("2d", { alpha: false })
 
-const end = 2*pi
+const end = 2.0*pi;
 function sirkeldings(x, y, r, color = "#fff") {
   ctx.fillStyle = color;
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, end);
   // ctx.rect(x, y, r, r)
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0.0, end);
   ctx.fill();
 }
 
@@ -112,7 +112,7 @@ function updatefunk(t) {
       // let z = Math.floor(r/rrr*255.0);
       // let c = rgb(z, z, z)
       let c = fargefunk(i);
-      sirkeldings(ax, ay, r**2, c)
+      sirkeldings(ax, ay, r**2.0, c);
     }
   }
 }
