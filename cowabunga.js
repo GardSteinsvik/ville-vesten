@@ -41,8 +41,8 @@ class Celledings {
     this.cw = this.w + this.w % this.total;
     this.ch = this.h + this.h % this.total;
 
-    this.perrad = Math.floor(this.cw/this.total);
-    this.perkol = Math.floor(this.ch/this.total);
+    this.perrad = Math.ceil(this.cw/this.total) + 1;
+    this.perkol = Math.ceil(this.ch/this.total) + 1;
     this.alle = this.perrad*this.perkol;
     
     this.x = new Int32Array(this.alle);
@@ -88,7 +88,7 @@ class Sprite {
         let y = i + oy;
         let c = this.data[i*this.width + j]*14;
         var nifarge = (c + ifarge) % kossfarge.length;
-        nifarge = nifarge || nifarge + 1
+        nifarge = nifarge || nifarge + 1;
 
         this.ccc.setcolor(x, y, c ? nifarge : 0);
         this.ccc.setstate(x, y, 2);
@@ -97,24 +97,33 @@ class Sprite {
   }
 }
 
-// tar to sett med farger av samme lengde m og et heltall n, og lager en matrise m x n
+// tar to sett a, b med farger der både a og b er av lengde m
+// og et heltall n, og lager en matrise m x n
 //
 //   1      j      n
-// [[a1 ... m1 ... b1]
-//  [a2 ... m2 ... b2]
+// [[a1 ... x1 ... b1]
+//  [a2 ... x2 ... b2]
 //           .
 //           .
 //           .
-//  [ai ... mi ... bi]
+//  [ai ... xi ... bi]
 //           .
 //           .
 //           .
-//  [am ... mm ... bm]]
+//  [am ... xm ... bm]]
 //
 //  j = floor(n/2)
+//
+// der ai og bi er den i-te fargen i hvert sitt sett, og xi er fargen omtrent halvveis mellom ai og bi.
+
+const rgbrev = (s) => s.slice(s.indexOf('(') + 1, -1).split(',').map(x => parseInt(x, 10));
+const hexrev = (s) => s.length === 7 ?
+      s.slice(1).match(/.{2}/g).map(x => parseInt(x,     16)) :
+      s.slice(1).match(/.{1}/g).map(x => parseInt(x + x, 16))
+
+const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s)
 
 function lerpcolor(a, b, n = 10) {
-  let rgbrev = (s) => s.slice(s.indexOf('(') + 1, -1).split(',').map(x => parseInt(x, 10));
   let lerp = (abi) => {
     let ret = new Array(n);
     let ai = abi[0];
@@ -134,7 +143,7 @@ function lerpcolor(a, b, n = 10) {
     return ret;
   }
 
-  let ab = _.zip(a.map(rgbrev), b.map(rgbrev))
+  let ab = _.zip(a.map(fargerev), b.map(fargerev))
       .map(lerp)
       .map(l => l.map(c => rgb(c[0], c[1], c[2])));
 
@@ -143,13 +152,13 @@ function lerpcolor(a, b, n = 10) {
 
 // lag et ccc.eobject, med en bounceting
 
-const farge = {
-  puster: ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
-  piedra: ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
-  zapzap: ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
-  sovsov: ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
-  slukna: ["#a1a1a1"]
-};
+const farge = [
+  ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
+  ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
+  ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
+  ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
+  ["#a1a1a1"]
+]
 
 const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
 const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`
@@ -195,14 +204,15 @@ let margin   = 6;
 var ccc = new Celledings(hvorstor, margin);
 const sss = new Sprite(varitsprite, 5, 7, ccc);
 
-const cw = ccc.cw;
-const ch = ccc.ch;
+const cw = canvas.width;
+const ch = canvas.height;
 const mmm = 20;
 const zzz = mmm*2;
 
-var kossfarge = fargefunk(genfarge(zzz));
-// var kossfarge = farge.piedra;
-// var kossfarge = repfarge(farge.piedra, zzz)
+var kossfarge = _.random(1) ?
+    repfarge(farge[Math.floor(farge.length*Math.random())], zzz*2 - 1) :
+    fargefunk(genfarge(zzz));
+
 var ifarge = 0;
 
 // ohoi
@@ -221,7 +231,7 @@ function mere() {
     //                        ikke vilt stilig
     //                               |
     //                               v
-    let a = fargefunk(genfarge(zzz)).slice(0, kossfarge.length);
+    let a = fargefunk(genfarge(zzz)).slice(0, Math.min(zzz*2 - 1, kossfarge.length));
     let b = kossfarge;
 
     lerpliste = lerpcolor(a, b, 6);
@@ -265,7 +275,7 @@ const ctx = canvas.getContext("2d", { alpha: false });
 ctx.scale(devicePixelRatio, devicePixelRatio);
 
 const updatefunk = () => {
-  ctx.clearRect(0, 0, ccc.cw, ccc.ch);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (let i = 0; i < ccc.alle; i += 1) {
     if (ccc.state[i] > 0) {

@@ -1,11 +1,10 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var requestAnimationFrame = window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame;
-
+var requestAnimationFrame = window.requestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.msRequestAnimationFrame;
 
 var colorIndex = 0;
 var colors = [
@@ -15,7 +14,6 @@ var colors = [
 ];
 
 var theta = 0;
-
 var fl = 250;
 var vpX = canvas.width / 2;
 var vpY = canvas.height / 2;
@@ -23,8 +21,8 @@ var vpY = canvas.height / 2;
 var circles = [];
 
 generateObject();
-
 drawFrame();
+
 function drawFrame() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -33,7 +31,6 @@ function drawFrame() {
 
     circles.forEach(move);
     circles.forEach(colorize);
-
     circles.forEach(draw);
 
     generateObject();
@@ -41,6 +38,7 @@ function drawFrame() {
     if (!circles[circles.length-1].visible) {
         circles.pop();
     }
+  
     requestAnimationFrame(drawFrame);
 }
 
@@ -55,7 +53,6 @@ function generateObject() {
     var radius = 25;
     var color = '#000000';
     circles.unshift(new Object3d(xpos, ypos, radius, color));
-
 }
 
 function move(object) {

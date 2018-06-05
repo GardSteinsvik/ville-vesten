@@ -24,8 +24,8 @@ class Celledings {
     this.cw = this.w + this.w % this.total;
     this.ch = this.h + this.h % this.total;
 
-    this.perrad = Math.floor(this.cw/this.total);
-    this.perkol = Math.floor(this.ch/this.total);
+    this.perrad = Math.ceil(this.cw/this.total) + 1;
+    this.perkol = Math.ceil(this.ch/this.total) + 1;
     this.alle = this.perrad*this.perkol;
 
     this.x = new Int32Array(this.alle);
@@ -64,8 +64,8 @@ function sirkeldings(x, y, r, color = "#fff") {
 
 let rect = canvas.getBoundingClientRect();
 let must = new Uint32Array(2);
-must[0] = Math.floor(ccc.cw/2);
-must[1] = Math.floor(ccc.ch/2);
+must[0] = Math.floor(canvas.width/2);
+must[1] = Math.floor(canvas.height/2);
 function hvorermusa(e) {
   must[0] = e.clientX - rect.left;
   must[1] = e.clientY - rect.top;
@@ -84,7 +84,7 @@ const fargefunk = (i) => rgb(ccc.r[i] = rfunk(ccc.r[i]),
 
 const dytt = pi/4.0;
 function updatefunk(t) {
-  ctx.clearRect(0, 0, ccc.w, ccc.h);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   let tt = t/1000.0;
   
   for (let i = 0; i < ccc.alle; i += 1) {
@@ -92,15 +92,18 @@ function updatefunk(t) {
     let ay = ccc.y[i];
     let bx = must[0];
     let by = must[1];
-    // let d = eukdist(ax, ay, bx, by);
 
     let felles = sin(tt/4.0)*pi;
     let bra = rot(ax, ay, bx, by, felles);
     let brb = rot(ax, ay, bx, by, felles + cos(tt*pi/4.0));
     let a = mandist(ax, ay, bra[0], bra[1]);
     let b = mandist(ax, ay, brb[0], brb[1]);
-
     let d = cup(a, b);
+
+    // alt
+    // let c = eukdist(ax, ay, bx, by) + 40;
+    // let d = cup(a, cup(b, c));
+
     let kossvei = (-1)**Math.floor(tt);
     
     let r = rrr - grense(0, (d/40.0), rrr) + (1.1*sin(d/15*cos(tt/6)))**3;
