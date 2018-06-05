@@ -136,7 +136,7 @@ const rot = (ox, oy, px, py, rad) => {
 
 // kanskje mindre bugga
 const eukdist = (ax, ay, bx, by) => Math.sqrt(ax**2 - 2*ax*bx + bx**2 +
-                                                    ay**2 - 2*ay*by + by**2);
+                                              ay**2 - 2*ay*by + by**2);
 
 const sirkel = (ox, oy, px, py, r = 1.0, d = eukdist) => d(ox, oy, px, py) - r;
 const sirkelrot = (ox, oy, px, py, r = 1.0, d = eukdist, rad = 0.0) => {
