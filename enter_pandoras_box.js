@@ -20,7 +20,7 @@ var angle = 0;
 var MIN_RADIUS = 0;
 var MAX_RADIUS = 150;
 
-var rows = 11, cols = 11;
+var rows = 10, cols = 10;
 
 var fl = 250;
 var vpX = canvas.width / 2;
@@ -51,7 +51,7 @@ function drawFrame() {
     }
 
     if (!circles[circles.length-1].visible) {
-        var amountOfCirclesInGrid = (rows-1)*(cols-1);
+        var amountOfCirclesInGrid = rows*cols;
         circles.splice(circles.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
     }
     requestAnimationFrame(drawFrame);
@@ -61,15 +61,21 @@ function generateObjects() {
     var xpos = -vpX;
     var ypos = -vpY;
 
-    for (var i = 0; i < rows-1; i++) {
+    for (var i = 0; i < rows; i++) {
         ypos = -vpY;
-        xpos += canvas.width/rows;
+        xpos += canvas.width/(rows+1);
 
-        for (var j = 0; j < cols-1; j++) {
-            ypos += canvas.height/cols;
+        for (var j = 0; j < cols; j++) {
+            ypos += canvas.height/(cols+1);
 
             var color = colors[colorIndex];
-            circles.unshift(new Object3d(xpos, ypos, radius, color));
+            var circle = new Circle3d(radius);
+            circle.xpos = xpos;
+            circle.ypos = ypos;
+            circle.zpos = 1500;
+            circle.vz = -5;
+            circle.color = color;
+            circles.unshift(circle);
         }
     }
 }

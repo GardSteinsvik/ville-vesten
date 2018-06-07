@@ -42,7 +42,7 @@ function drawFrame() {
 
     var radius = MIN_RADIUS + MAX_RADIUS * Math.abs(Math.tan(angle));
 
-    this.circles.forEach(function (circles) {
+    this.images.forEach(function (circles) {
         var newX;
         var newY;
         if (radius > canvas.width) {

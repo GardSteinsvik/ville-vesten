@@ -7,6 +7,8 @@ var requestAnimationFrame = window.requestAnimationFrame ||
     window.msRequestAnimationFrame;
 
 
+var radius = 20;
+
 var colorIndex = 0;
 var colors = [
     '#46daff',
@@ -14,48 +16,64 @@ var colors = [
     '#ffe454'
 ];
 
-var theta = 0;
+var angle = 0;
+var MIN_RADIUS = 0;
+var MAX_RADIUS = 150;
+
+var rows = 4, cols = 6;
 
 var fl = 250;
 var vpX = canvas.width / 2;
 var vpY = canvas.height / 2;
 
-var circles = [];
+var images = [];
 
-generateObject();
+generateObjects();
 
 drawFrame();
 function drawFrame() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
+    angle += .05;
+
     vpX = canvas.width / 2;
     vpY = canvas.height / 2;
 
-    circles.forEach(move);
-    circles.forEach(colorize);
+    images.forEach(move);
+    images.forEach(colorize);
 
-    circles.forEach(draw);
+    images.forEach(draw);
 
-    generateObject();
+    if (images[0].zpos % 250 === 0) {
+        generateObjects();
+    }
 
-    if (!circles[circles.length-1].visible) {
-        circles.pop();
+    if (!images[images.length-1].visible) {
+        var amountOfCirclesInGrid = rows*cols;
+        images.splice(images.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
     }
     requestAnimationFrame(drawFrame);
 }
 
-function generateObject() {
-    var distanceFromCenter = 100;
+function generateObjects() {
+    var xpos = -vpX;
+    var ypos = -vpY;
 
-    var xpos = distanceFromCenter * Math.cos(theta*theta/10);
-    var ypos = distanceFromCenter * Math.sin(theta*theta/10);
+    for (var i = 0; i < cols; i++) {
+        ypos = -vpY;
+        xpos += canvas.width/(cols+1);
 
-    theta += .1;
+        for (var j = 0; j < rows; j++) {
+            ypos += canvas.height/(rows+1);
 
-    var radius = 25;
-    var color = '#000000';
-    circles.unshift(new Object3d(xpos, ypos, radius, color));
-
+            var image = new Image3d('images/colax.png');
+            image.xpos = xpos;
+            image.ypos = ypos;
+            image.zpos = 2000;
+            image.vz = -4;
+            images.unshift(image);
+        }
+    }
 }
 
 function move(object) {
@@ -68,6 +86,7 @@ function move(object) {
         object.scaleX = object.scaleY = scale;
         object.x = vpX + object.xpos * scale;
         object.y = vpY + object.ypos * scale;
+        object.rotation = angle;
         object.visible = true;
     } else {
         object.visible = false;
@@ -76,8 +95,7 @@ function move(object) {
 
 function colorize(object) {
     if (object.zpos % 100 === 0) {
-        // object.color = colors[++object.colorIndex%colors.length];
-        object.color = hslToRgb(theta/10%1, 1, .5);
+        object.color = colors[++object.colorIndex%colors.length];
     }
 }
 
@@ -95,71 +113,4 @@ function getRandomColor() {
     }
     // console.log(color);
     return color;
-}
-
-function nextColor(color) {
-    color = color.substr(1, 6);
-    var letters = '0123456789ABCDEF';
-    var colorType = (2 * Math.floor(Math.random() * 3)) + 2;
-
-    var newColor = '#';
-
-    for (var i = 0; i < 6; i++) {
-        if (!(i === colorType)) {
-            newColor += color[i];
-        } else {
-            var colorIndex = (color.indexOf(color.substr(colorType, 1)) + 1) % 16;
-            newColor += letters[colorIndex];
-        }
-    }
-    return newColor;
-}
-
-function nextSmoothColor(color) {
-    var letters = '0123456789abcdef';
-    var newColor = '#';
-    for (var i = 0; i < color.length; i++) {
-        if (color.charAt(i) === '#') continue;
-        var nextIndex = (letters.indexOf(color.charAt(i)) + 1) % letters.length;
-        newColor += letters[nextIndex];
-    }
-    return newColor;
-}
-
-function hslToRgb(h, s, l){
-    var r, g, b;
-
-    if(s === 0){
-        r = g = b = l; // achromatic
-    }else{
-        var hue2rgb = function hue2rgb(p, q, t){
-            if(t < 0) t += 1;
-            if(t > 1) t -= 1;
-            if(t < 1/6) return p + (q - p) * 6 * t;
-            if(t < 1/2) return q;
-            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-            return p;
-        };
-
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1/3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1/3);
-    }
-
-    var resColor = "#";
-    resColor += getHex(r);
-    resColor += getHex(g);
-    resColor += getHex(b);
-    return resColor;
-}
-
-function getHex(c) {
-    var res = Math.round(c * 255).toString(16);
-    if (res.length < 2) {
-        res = '0'+res;
-    }
-
-    return res;
 }

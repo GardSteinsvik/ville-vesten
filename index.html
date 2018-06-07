@@ -20,14 +20,15 @@
 <body style="background-color: #424242">
     <canvas id="canvas" width="750" height="750"></canvas>
     <script src="objects/circle.js"></script>
-    <script src="objects/object3d.js"></script>
+    <script src="objects/circle3d.js"></script>
+    <script src="objects/image3d.js"></script>
     <script src="external/lodash.js"></script>
     <script>
      var canvas = document.getElementById("canvas");
      canvas.width = window.innerWidth;
      canvas.height = window.innerHeight;
 
-     window.onresize = function (ev) {
+     window.onresize = function () {
          canvas.width = window.innerWidth;
          canvas.height = window.innerHeight;
      };
@@ -44,8 +45,8 @@
          'cowabunga.js'
      ];
 
-     loadRandomScript();
-     // loadScript('experiment.js');
+     // loadRandomScript();
+     loadScript('experiment.js');
 
      function loadRandomScript() {
          var scriptIndex = Math.floor(Math.random() * scripts.length);

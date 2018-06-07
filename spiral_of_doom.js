@@ -51,8 +51,12 @@ function generateObject() {
     theta += .1;
 
     var radius = 25;
-    var color = '#000000';
-    circles.unshift(new Object3d(xpos, ypos, radius, color));
+    var circle = new Circle3d(radius);
+    circle.xpos = xpos;
+    circle.ypos = ypos;
+    circle.zpos = 1500;
+    circle.vz = -5;
+    circles.unshift(circle);
 }
 
 function move(object) {
