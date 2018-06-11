@@ -1,10 +1,11 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var requestAnimationFrame = window.requestAnimationFrame
-    || window.mozRequestAnimationFrame
-    || window.webkitRequestAnimationFrame
-    || window.msRequestAnimationFrame;
+var requestAnimationFrame = window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame;
+
 
 var colorIndex = 0;
 var colors = [
@@ -14,15 +15,16 @@ var colors = [
 ];
 
 var theta = 0;
-var fl = 250;
+
+var fl = 750;
 var vpX = canvas.width / 2;
 var vpY = canvas.height / 2;
 
 var circles = [];
 
 generateObject();
-drawFrame();
 
+drawFrame();
 function drawFrame() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -31,6 +33,7 @@ function drawFrame() {
 
     circles.forEach(move);
     circles.forEach(colorize);
+
     circles.forEach(draw);
 
     generateObject();
@@ -38,25 +41,25 @@ function drawFrame() {
     if (!circles[circles.length-1].visible) {
         circles.pop();
     }
-  
     requestAnimationFrame(drawFrame);
 }
 
 function generateObject() {
-    var distanceFromCenter = 100;
+    var distanceFromCenter = 100+20*Math.sin(theta);
 
     var xpos = distanceFromCenter * Math.cos(theta*theta/10);
     var ypos = distanceFromCenter * Math.sin(theta*theta/10);
 
-    theta += .1;
+    theta += .08;
 
-    var radius = 25;
+    var radius = 45+20*Math.sin(theta);
     var circle = new Circle3d(radius);
     circle.xpos = xpos;
     circle.ypos = ypos;
     circle.zpos = 1500;
     circle.vz = -5;
     circles.unshift(circle);
+
 }
 
 function move(object) {

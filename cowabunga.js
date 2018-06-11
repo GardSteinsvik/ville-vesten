@@ -57,6 +57,8 @@ class Celledings {
       let x = this.total*(i % this.perrad);
       let y = this.total*Math.floor(i/this.perrad);
 
+      x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
+      
       this.x[i] = x;
       this.y[i] = y;
       this.fx[i] = x;
@@ -182,6 +184,7 @@ function genfarge(n) {
 
   for (let i = 0; i < n; i += 1) {
     farger.push(rgb(ri, gi, bi))
+    
     ri = fargegrense(ri + _.random(rlo, rhi));
     gi = fargegrense(gi + _.random(glo, ghi));
     bi = fargegrense(bi + _.random(blo, bhi));

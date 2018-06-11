@@ -38,6 +38,8 @@ class Celledings {
       let x = this.total*(i % this.perrad);
       let y = this.total*Math.floor(i/this.perrad);
 
+      x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
+      
       this.x[i] = x;
       this.y[i] = y;
       this.r[i] = _.random(0, 255);
