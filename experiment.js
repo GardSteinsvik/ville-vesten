@@ -33,7 +33,7 @@ var angle = 0;
 var MIN_RADIUS = 0;
 var MAX_RADIUS = 150;
 
-var rows = 5, cols = 5;
+var rows = 6, cols = 6;
 
 var fl = 250;
 var vpX = canvas.width / 2;
@@ -82,8 +82,8 @@ function generateObjects() {
             image.xpos = xpos;
             image.ypos = ypos;
             image.zpos = 2000;
-            image.vy = image.vy + 2*(i + 1)*(-1)**(j)
-            image.vx = image.vx + 2*(j + 1)*(-1)**(i)
+            // image.vy = image.vy + 2*(i + 1)*(-1)**(j)
+            // image.vx = image.vx + 2*(j + 1)*(-1)**(i)
             image.vz = -5;
             images.unshift(image);
         }
