@@ -1,0 +1,17 @@
+* ???
+** experiment.js
+*** darken
+    kan funke å legge over en maske n antall ganger, der n er gitt ved zpos på ett eller annet vis.
+    oi alternativ! du kan også legge over en diger firkant på hvert lag, det funker.    
+    #+BEGIN_EXAMPLE
+    sidelengs:
+    : cola --o o-- firkant
+    :        | |
+    :        v v                   o-- dæ
+    :        o |  o |  o |         |
+    :        o |  o |  o |         v
+    :        o |  o |  o |         c
+    :        o |  o |  o |
+    :        o |  o |  o |
+    :       <-- mørkere --
+    #+END_EXAMPLE

@@ -1,10 +1,7 @@
-let wowfunk = () => {};
-
 window.addEventListener("mousemove", hvorermusa)
 window.addEventListener("mousewheel", (e) => angle += 0.1*e.deltaY/70)
-window.setInterval(wowfunk, 60);
 
-let mus  = { x: 0, y: 0 };
+let mus  = { x: canvas.width/2, y: canvas.height/2 };
 let rect = canvas.getBoundingClientRect();
 function hvorermusa(e) {
     mus.x = e.clientX - rect.left;
@@ -14,10 +11,10 @@ function hvorermusa(e) {
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var requestAnimationFrame = window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame;
+var requestAnimationFrame = window.requestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.msRequestAnimationFrame;
 
 
 var radius = 20;
@@ -86,7 +83,7 @@ function generateObjects() {
         for (var j = 0; j < rows; j++) {
             ypos += canvas.height/(rows + 1);
 
-            var image = new Image3d('images/poltercolax.png');
+            var image = new Image3d('images/colax.png', 'images/poltercolax.png');
             image.xpos = xpos;
             image.ypos = ypos;
             image.zpos = MAX_Z;
@@ -116,7 +113,9 @@ function wowdist(a, b, c = 2*pi) {
     return z < x ? z : -x;
 }
 
-function snorm(x) { return x - 2*pi*Math.floor(x/(2*pi)) }
+function snorm(x) {
+    return x + 2*pi*Math.round(x/(2*pi))
+}
 
 function sflytt(a, b) {
     var [a, b, d] = a > b ? [a, b, 1] : [b, a, -1];
@@ -125,7 +124,7 @@ function sflytt(a, b) {
 }
 
 var uhu = 0;
-window.setInterval(() => console.log(uhu), 300)
+window.setInterval(() => console.log(uhu), 300);
 
 function move(object, t) {
     object.xpos += object.vx;
@@ -137,16 +136,17 @@ function move(object, t) {
         let fax = object.x - mus.x;
         let fay = object.y - mus.y;
         let mod = Math.sqrt(fax**2 + fay**2)/Math.sqrt((window.innerWidth/2)**2 + (window.innerHeight/2)**2)
-        let rot = snorm(Math.atan2(fay, fax) - pi/2); uhu = rot;
+        let rot = snorm(Math.atan2(fay, fax) - pi/2 + angle);
+        uhu = rot;
         let tor = snorm(object.rotation);
-        let ddd = sflytt(tor, rot); uhu = ddd;
-            
+        var ddd = sflytt(tor, rot); // uhu = ddd;
+
+        // object.rotation = rot
+        
         object.rotation += (ddd/(object.zpos/50 + 10));
-
         // object.rotation = pi/8*((Math.floor(object.zpos/50) + object.col*object.row) % 16)
-
         // object.rotation += ddd/100;
-
+        
         object.scaleX = object.scaleY = scale*dingzz(object.zpos, 200)
         object.x = vpX + object.xpos*scale*2;
         object.y = vpY + object.ypos*scale*4;

@@ -6,78 +6,78 @@ var megaindex = 0;
 const megarandom = new Float32Array(KORMANG)
 
 for (let i = 0; i < KORMANG; i += 1) {
-  megarandom[i] = Math.random()
+    megarandom[i] = Math.random()
 }
 
 const rand = (a) => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
 const rint = (a, b) => a + rand(b - a);
 
 class Musedings {
-  constructor(n) {
-    this.musx = new Uint32Array(n);
-    this.musy = new Uint32Array(n);
-    this.kor  = 0;
-    this.n    = n;
-  }
-
-  push(x, y) {
-    this.musx[this.kor] = x;
-    this.musy[this.kor] = y;
-    this.kor = (this.kor + 1) % this.n;
-  }
-
-  fetch(k) {
-    let ka =  Math.abs(this.kor + k) % this.n;
-
-    return [this.musx[ka], this.musy[ka]];
-  }
-
-  fyll(oxs, oys) {
-    for (let ak = 0; ak < this.n; ak += 1) {
-      let ka = (this.kor + ak) % this.n;
-
-      oxs[ak] = this.musx[ka];
-      oys[ak] = this.musy[ka];
+    constructor(n) {
+        this.musx = new Uint32Array(n);
+        this.musy = new Uint32Array(n);
+        this.kor  = 0;
+        this.n    = n;
     }
-  }
+
+    push(x, y) {
+        this.musx[this.kor] = x;
+        this.musy[this.kor] = y;
+        this.kor = (this.kor + 1) % this.n;
+    }
+
+    fetch(k) {
+        let ka =  Math.abs(this.kor + k) % this.n;
+
+        return [this.musx[ka], this.musy[ka]];
+    }
+
+    fyll(oxs, oys) {
+        for (let ak = 0; ak < this.n; ak += 1) {
+            let ka = (this.kor + ak) % this.n;
+
+            oxs[ak] = this.musx[ka];
+            oys[ak] = this.musy[ka];
+        }
+    }
 }
 
 class Celledings {
-  constructor(hvorstor = 4, margin = 2, w = 0, h = 0) {
-    this.hvorstor = hvorstor;
-    this.margin   = margin;
-    this.total    = this.hvorstor + this.margin;
+    constructor(hvorstor = 4, margin = 2, w = 0, h = 0) {
+        this.hvorstor = hvorstor;
+        this.margin   = margin;
+        this.total    = this.hvorstor + this.margin;
 
-    this.w  = w || window.innerWidth  - (this.total);
-    this.h  = h || window.innerHeight - (this.total);
-    this.cw = this.w + this.w % this.total;
-    this.ch = this.h + this.h % this.total;
+        this.w  = w || window.innerWidth  - (this.total);
+        this.h  = h || window.innerHeight - (this.total);
+        this.cw = this.w + this.w % this.total;
+        this.ch = this.h + this.h % this.total;
 
-    this.perrad = Math.ceil(this.cw/this.total) + 1;
-    this.perkol = Math.ceil(this.ch/this.total) + 1;
-    this.alle = this.perrad*this.perkol;
-    
-    this.x = new Int32Array(this.alle);
-    this.y = new Int32Array(this.alle);
-    this.fx = new Float32Array(this.alle);
-    this.fy = new Float32Array(this.alle);
-    this.fr = new Float32Array(this.alle);
-    this.ir = new Uint32Array(this.alle);
-    this.farge = new Uint8Array(this.alle);
-    this.state = new Uint8Array(this.alle);
+        this.perrad = Math.ceil(this.cw/this.total) + 1;
+        this.perkol = Math.ceil(this.ch/this.total) + 1;
+        this.alle = this.perrad*this.perkol;
+        
+        this.x = new Int32Array(this.alle);
+        this.y = new Int32Array(this.alle);
+        this.fx = new Float32Array(this.alle);
+        this.fy = new Float32Array(this.alle);
+        this.fr = new Float32Array(this.alle);
+        this.ir = new Uint32Array(this.alle);
+        this.farge = new Uint8Array(this.alle);
+        this.state = new Uint8Array(this.alle);
 
-    for (let i = 0; i < this.alle; i += 1) {
-      let x = this.total*(i % this.perrad);
-      let y = this.total*Math.floor(i/this.perrad);
+        for (let i = 0; i < this.alle; i += 1) {
+            let x = this.total*(i % this.perrad);
+            let y = this.total*Math.floor(i/this.perrad);
 
-      // x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
-      
-      this.x[i] = x;
-      this.y[i] = y;
-      this.fx[i] = x;
-      this.fy[i] = y;
+            // x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
+            
+            this.x[i] = x;
+            this.y[i] = y;
+            this.fx[i] = x;
+            this.fy[i] = y;
+        }
     }
-  }
 }
 
 const varitsprite = [1, 0, 0, 0, 0,
@@ -89,28 +89,28 @@ const varitsprite = [1, 0, 0, 0, 0,
                      0, 0, 0, 0, 5];
 
 class Sprite {
-  constructor(data, width, height, ccc) {
-    this.data = data;
-    this.width = width;
-    this.height = height;
-    this.ccc = ccc;
-  }
-
-  draw(ox = 0, oy = 0) {
-    for (let i = 0; i < this.height; i += 1) {
-      for (let j = 0; j < this.width; j += 1) {
-        let x = j + ox;
-        let y = i + oy;
-        let c = this.data[i*this.width + j]*14;
-        var nifarge = (c + ifarge) % kossfarge.length;
-
-        nifarge = nifarge || nifarge + 1;
-
-        // this.ccc.setfarge(x, y, c ? nifarge : 0);
-        this.ccc.setstate(x, y, 2);
-      }
+    constructor(data, width, height, ccc) {
+        this.data = data;
+        this.width = width;
+        this.height = height;
+        this.ccc = ccc;
     }
-  }
+
+    draw(ox = 0, oy = 0) {
+        for (let i = 0; i < this.height; i += 1) {
+            for (let j = 0; j < this.width; j += 1) {
+                let x = j + ox;
+                let y = i + oy;
+                let c = this.data[i*this.width + j]*14;
+                var nifarge = (c + ifarge) % kossfarge.length;
+
+                nifarge = nifarge || nifarge + 1;
+
+                // this.ccc.setfarge(x, y, c ? nifarge : 0);
+                this.ccc.setstate(x, y, 2);
+            }
+        }
+    }
 }
 
 // tar to sett a, b med farger der både a og b er av lengde m
@@ -137,40 +137,44 @@ const hexrev = (s) => s.length === 7 ?
       s.slice(1).match(/.{2}/g).map(x => parseInt(x,     16)) :
       s.slice(1).match(/.{1}/g).map(x => parseInt(x + x, 16))
 
-const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s)
+const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s);
+const zip  = (a, b) => a.length <= b.length ?
+      a.map((aaaa, i) => [aaaa, b[i]]) :
+      b.map((bbbb, i) => [a[i], bbbb])
+
 
 function lerpfarge(a, b, n = 10) {
-  let lerp = (abi) => {
-    let ret = new Array(n);
-    let ai = abi[0];
-    let bi = abi[1];
+    let lerp = (abi) => {
+        let ret = new Array(n);
+        let ai = abi[0];
+        let bi = abi[1];
 
-    for (let i = 0; i < n; i++) {
-      let ni = [0, 0, 0]
+        for (let i = 0; i < n; i++) {
+            let ni = [0, 0, 0]
 
-      ni[0] = Math.floor((1 - i/n)*ai[0] + (i/n)*bi[0]);
-      ni[1] = Math.floor((1 - i/n)*ai[1] + (i/n)*bi[1]);
-      ni[2] = Math.floor((1 - i/n)*ai[2] + (i/n)*bi[2]);
+            ni[0] = Math.floor((1 - i/n)*ai[0] + (i/n)*bi[0]);
+            ni[1] = Math.floor((1 - i/n)*ai[1] + (i/n)*bi[1]);
+            ni[2] = Math.floor((1 - i/n)*ai[2] + (i/n)*bi[2]);
 
-      ret[i] = ni;
+            ret[i] = ni;
+        }
+
+        return ret;
     }
 
-    return ret;
-  }
+    let ab = zip(a.map(fargerev), b.map(fargerev))
+        .map(lerp)
+        .map(l => l.map(c => rgb(c[0], c[1], c[2])));
 
-  let ab = _.zip(a.map(fargerev), b.map(fargerev))
-      .map(lerp)
-      .map(l => l.map(c => rgb(c[0], c[1], c[2])));
-
-  return ab;
+    return ab;
 }
 
 const farge = [
-  ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
-  ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
-  ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
-  ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
-//  ["#a1a1a1"]
+    ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
+    ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
+    ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
+    ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
+    //  ["#a1a1a1"]
 ]
 
 const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
@@ -185,31 +189,31 @@ const repfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => 
                                                                       fff[fff.length - 1 - (i % fff.length)])
 
 function genfarge(n) {
-  let farger = []
-  let ri = rint(0, 255);
-  let gi = rint(0, 255);
-  let bi = rint(0, 255);
+    let farger = []
+    let ri = rint(0, 255);
+    let gi = rint(0, 255);
+    let bi = rint(0, 255);
 
-  let [ lo,  hi] = [[-100,        -20], [  20,        100]];
-  let [rlo, rhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
-  let [glo, ghi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
-  let [blo, bhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
+    let [ lo,  hi] = [[-100,        -20], [  20,        100]];
+    let [rlo, rhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
+    let [glo, ghi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
+    let [blo, bhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
 
-  for (let i = 0; i < n; i += 1) {
-    farger.push(rgb(ri, gi, bi))
-    
-    ri = fargegrense(ri + rint(rlo, rhi));
-    gi = fargegrense(gi + rint(glo, ghi));
-    bi = fargegrense(bi + rint(blo, bhi));
-  }
+    for (let i = 0; i < n; i += 1) {
+        farger.push(rgb(ri, gi, bi))
+        
+        ri = fargegrense(ri + rint(rlo, rhi));
+        gi = fargegrense(gi + rint(glo, ghi));
+        bi = fargegrense(bi + rint(blo, bhi));
+    }
 
-  return farger;
+    return farger;
 }
 
 const mapkey = (f, o) => Object.keys(o).reduce((ny, k) => {
-  ny[k] = f(o[k]);
+    ny[k] = f(o[k]);
 
-  return ny;
+    return ny;
 }, {});
 
 let hvorstor = 6;
@@ -235,48 +239,48 @@ var sulten = false;
 var lerpliste = [];
 var istart = 0;
 function mere() {
-  if (!sulten) {
-    //                        ikke vilt stilig
-    //                               |
-    //                               v
-    let a = fargefunk(genfarge(zzz)).slice(0, Math.min(zzz*2 - 1, kossfarge.length));
-    let b = kossfarge;
+    if (!sulten) {
+        //                        ikke vilt stilig
+        //                               |
+        //                               v
+        let a = fargefunk(genfarge(zzz)).slice(0, Math.min(zzz*2 - 1, kossfarge.length));
+        let b = kossfarge;
 
-    lerpliste = lerpfarge(a, b, 6);
-    sulten = true;
-    istart = ifarge;
-  }
+        lerpliste = lerpfarge(a, b, 6);
+        sulten = true;
+        istart = ifarge;
+    }
 }
 
 var itest = 0;
 function knask() {
-  let ifargern = ifarge;
-  let tygg = lerpliste[ifargern].pop();
+    let ifargern = ifarge;
+    let tygg = lerpliste[ifargern].pop();
 
-  if (tygg) {
-    kossfarge[ifargern] = tygg;
-    itest = 0;
-  } else if (ifargern === istart) {
-    itest += 1;
+    if (tygg) {
+        kossfarge[ifargern] = tygg;
+        itest = 0;
+    } else if (ifargern === istart) {
+        itest += 1;
 
-    if (itest >= 2) {
-      itest = 0;
-      sulten = false;
-      console.log("wow");
+        if (itest >= 2) {
+            itest = 0;
+            sulten = false;
+            console.log("wow");
+        }
     }
-  }
 }
 
 // dist fra forrige?
 window.addEventListener("mousemove", hvorermusa)
 window.addEventListener("keydown", (e) => {
-  switch(e.key) {
-  case "p": r += 1; break;
-  case "o": r -= 1; break;
-  case "l": s += 1; break;
-  case "k": s -= 1; break;
-  case "a": mere(); break;
-  }
+    switch(e.key) {
+    case "p": r += 1; break;
+    case "o": r -= 1; break;
+    case "l": s += 1; break;
+    case "k": s -= 1; break;
+    case "a": mere(); break;
+    }
 })
 
 // atlas?
@@ -296,85 +300,85 @@ var offctx = offcanvas.getContext("2d", { alpha: false });
 offctx.scale(devicePixelRatio, devicePixelRatio);
 
 function atlasfunk() {
-  for (let i = 0; i < antall; i += 1) {
-    offctx.fillStyle = kossfarge[i];
+    for (let i = 0; i < antall; i += 1) {
+        offctx.fillStyle = kossfarge[i];
 
-    offctx.beginPath();
-    offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
-    offctx.closePath();
+        offctx.beginPath();
+        offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
+        offctx.closePath();
 
-    offctx.fill();
-  }
+        offctx.fill();
+    }
 }
 
 atlasfunk()
 
 function lerpatlas(i) {
-  let x1 = stride*i;
-  let y1 = 0;
-  let x2 = stride + x1;
-  let y2 = stride;
-  
-  offctx.clearRect(x1, y1, x2, y2);
-  offctx.fillStyle = kossfarge[i];
-  
-  offctx.beginPath();
-  offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
-  offctx.closePath();
+    let x1 = stride*i;
+    let y1 = 0;
+    let x2 = stride + x1;
+    let y2 = stride;
+    
+    offctx.clearRect(x1, y1, x2, y2);
+    offctx.fillStyle = kossfarge[i];
+    
+    offctx.beginPath();
+    offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
+    offctx.closePath();
 
-  offctx.fill();
+    offctx.fill();
 }
 
 var xoff = 0;
 var yoff = 0;
 
 const offupdatefunk = (t) => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  for (let i = 0; i < ccc.alle; i += 1) {
-    if (ccc.state[i] > 0) {
-      let fafafa = ccc.farge[i];
-      let x = ccc.x[i];
-      let y = ccc.y[i];
-      let sc = grense(0.01, ccc.fr[i], radius)
-      
-      ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc + xoff, y - sc + yoff, sc*2, sc*2);
-      
-      ccc.state[i] = 0;
-    }
-  }  
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    for (let i = 0; i < ccc.alle; i += 1) {
+        if (ccc.state[i] > 0) {
+            let fafafa = ccc.farge[i];
+            let x = ccc.x[i];
+            let y = ccc.y[i];
+            let sc = grense(0.01, ccc.fr[i], radius)
+            
+            ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc + xoff, y - sc + yoff, sc*2, sc*2);
+            
+            ccc.state[i] = 0;
+        }
+    }  
 }
 
 const ctx = canvas.getContext("2d", { alpha: false });
 ctx.scale(devicePixelRatio, devicePixelRatio);
 
 const updatefunk = () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < ccc.alle; i += 1) {
-    if (ccc.state[i] > 0) {
-      ctx.fillStyle = kossfarge[ccc.farge[i]];
-      
-      ctx.beginPath();
-      ctx.arc(ccc.x[i], ccc.y[i], grense(0, ccc.fr[i], ccc.hvorstor), 0, 2*Math.PI);
-      ctx.closePath();
-      
-      ctx.fill();
+    for (let i = 0; i < ccc.alle; i += 1) {
+        if (ccc.state[i] > 0) {
+            ctx.fillStyle = kossfarge[ccc.farge[i]];
+            
+            ctx.beginPath();
+            ctx.arc(ccc.x[i], ccc.y[i], grense(0, ccc.fr[i], ccc.hvorstor), 0, 2*Math.PI);
+            ctx.closePath();
+            
+            ctx.fill();
 
-      ccc.state[i] = 0;
+            ccc.state[i] = 0;
+        }
     }
-  }
 };
 
 let rect = canvas.getBoundingClientRect();
 
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
 window.setInterval(
-  () => ripplepush(
-    rint(rect.left, rect.right),
-    rint(rect.top,  rect.bottom)
-  ),
-  1000
+    () => ripplepush(
+        rint(rect.left, rect.right),
+        rint(rect.top,  rect.bottom)
+    ),
+    1000
 )
 
 const velgfunk = (ox, oy) => rand(1) ?
@@ -384,67 +388,67 @@ const velgfunk = (ox, oy) => rand(1) ?
 const ripplemax = 500.0;
 const ripplelength = 20;
 const ripplefunk = (ox, oy, r = 0) => ({
-  f: velgfunk(ox, oy),
-  r: r,
-  rmax: ripplemax, // rint(200, ripplemax),
-  rot: rint(10, 300)
+    f: velgfunk(ox, oy),
+    r: r,
+    rmax: ripplemax, // rint(200, ripplemax),
+    rot: rint(10, 300)
 });
 
 let ripple = [];
 for (let i = 0; i < ripplelength; i += 1) {
-  ripple.push(ripplefunk(0, 0, ripplemax + 10.0));
+    ripple.push(ripplefunk(0, 0, ripplemax + 10.0));
 }
 
 var iripple = 0;
 const ripplepush = (ox, oy) => {
-  let i = iripple++ % ripplelength;
+    let i = iripple++ % ripplelength;
 
-  if (ripple[i].r > ripple[i].rmax) {
-    ripple[i] = ripplefunk(ox, oy, 0);
-  }
+    if (ripple[i].r > ripple[i].rmax) {
+        ripple[i] = ripplefunk(ox, oy, 0);
+    }
 }
 
 function geomdingstre(t) {
-  let nais = t/600.0;
+    let nais = t/600.0;
 
-  for (let i = 0; i < ccc.state.length; i += 1) {
-    for (let irip = 0; irip < ripplelength; irip += 1) {
-      let rip = ripple[irip];
+    for (let i = 0; i < ccc.state.length; i += 1) {
+        for (let irip = 0; irip < ripplelength; irip += 1) {
+            let rip = ripple[irip];
 
-      if (rip.r < rip.rmax) {
-        let rrot = (-1)**rip.rot*nais*10.0/(rip.rot + 1.0);
-        let ra = rip.r;
-        let rb = rip.r - 300.0*(((rip.rmax - rip.r)/(rip.rmax))**2)
-        let x = rip.f(ccc.fx[i], ccc.fy[i], ra, rrot)
-        let y = rip.f(ccc.fx[i], ccc.fy[i], rb, rrot)
-        let c = cut(x, y);
+            if (rip.r < rip.rmax) {
+                let rrot = (-1)**rip.rot*nais*10.0/(rip.rot + 1.0);
+                let ra = rip.r;
+                let rb = rip.r - 300.0*(((rip.rmax - rip.r)/(rip.rmax))**2)
+                let x = rip.f(ccc.fx[i], ccc.fy[i], ra, rrot)
+                let y = rip.f(ccc.fx[i], ccc.fy[i], rb, rrot)
+                let c = cut(x, y);
 
-        if (c <= 0.0) {
-          ccc.fr[i] = -c;
-          
-          if (ccc.state[i] === 1) {
-            ccc.farge[i] = zzz - 1 - (irip % zzz);
-            ccc.state[i] = 2;
-          } else {
-            ccc.farge[i] = irip % zzz;
-            ccc.state[i] = 1;
-          }
+                if (c <= 0.0) {
+                    ccc.fr[i] = -c;
+                    
+                    if (ccc.state[i] === 1) {
+                        ccc.farge[i] = zzz - 1 - (irip % zzz);
+                        ccc.state[i] = 2;
+                    } else {
+                        ccc.farge[i] = irip % zzz;
+                        ccc.state[i] = 1;
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  for (let rip of ripple) {
-    rip.r += 5.0;
-  }
+    for (let rip of ripple) {
+        rip.r += 5.0;
+    }
 }
 
 function geomdingstsu(t) {
-  let [mx, my] = mus.fetch(0);
-  let wowx = Math.floor(mx/ccc.total - sss.width/2);
-  let wowy = Math.floor(my/ccc.total - sss.height/2);
+    let [mx, my] = mus.fetch(0);
+    let wowx = Math.floor(mx/ccc.total - sss.width/2);
+    let wowy = Math.floor(my/ccc.total - sss.height/2);
 
-  sss.draw(wowx, wowy)
+    sss.draw(wowx, wowy)
 }
 
 var s = 0.0;
@@ -452,31 +456,31 @@ var oxs = new Uint32Array(mmm);
 var oys = new Uint32Array(mmm);
 var bredde = 28.0;
 function geomdings(t) {
-  let nais = t/500.0;
-  let rmod = r + 1;
-  mus.fyll(oxs, oys);
+    let nais = t/500.0;
+    let rmod = r + 1;
+    mus.fyll(oxs, oys);
 
-  for (let k = mmm - 1; k > 0; k -= 1) {
-    for (let i = 0; i < ccc.state.length; i += 1) {
-      let krot = (-1)**k*nais/(k + 1.0);
-      let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
-      let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, mandist);
-      let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          mandist);
-      let c = cut(x, y);
+    for (let k = mmm - 1; k > 0; k -= 1) {
+        for (let i = 0; i < ccc.state.length; i += 1) {
+            let krot = (-1)**k*nais/(k + 1.0);
+            let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
+            let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, mandist);
+            let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          mandist);
+            let c = cut(x, y);
 
-      if (c <= 0.0) {
-        ccc.fr[i] = -c;
-        
-        if (ccc.state[i] === 1) {
-          ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
-          ccc.state[i] = 2;
-        } else {
-          ccc.farge[i] = (k + ifarge) % zzz;
-          ccc.state[i] = 1;
+            if (c <= 0.0) {
+                ccc.fr[i] = -c;
+                
+                if (ccc.state[i] === 1) {
+                    ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
+                    ccc.state[i] = 2;
+                } else {
+                    ccc.farge[i] = (k + ifarge) % zzz;
+                    ccc.state[i] = 1;
+                }
+            }
         }
-      }
     }
-  }
 };
 
 // ~~~~
@@ -488,12 +492,12 @@ let must = new Uint32Array(2);
 must[0] = Math.floor(cw/2);
 must[1] = Math.floor(ch/2);
 function hvorermusa(e) {
-  must[0] = e.clientX - rect.left;
-  must[1] = e.clientY - rect.top;
+    must[0] = e.clientX - rect.left;
+    must[1] = e.clientY - rect.top;
 }
 
 function pushmus() {
-  mus.push(must[0], must[1]);
+    mus.push(must[0], must[1]);
 }
 
 // ~~~~~
@@ -509,11 +513,11 @@ const maidist = (ax, ay, bx, by, eps = 0.1) => ((Math.abs(ax - bx) < eps) && (Ma
 const eukdist = (ax, ay, bx, by) => Math.sqrt((ax - bx)**2.0 + (ay - by)**2.0);
 const mandist = (ax, ay, bx, by) => Math.abs(ax - bx) + Math.abs(ay - by);
 const rot = (ox, oy, px, py, rad) => {
-  let cosx = Math.cos(rad);
-  let sinx = Math.sin(rad);
+    let cosx = Math.cos(rad);
+    let sinx = Math.sin(rad);
 
-  return [(px - ox)*cosx - (py - oy)*sinx + ox,
-          (px - ox)*sinx + (py - oy)*cosx + oy];
+    return [(px - ox)*cosx - (py - oy)*sinx + ox,
+            (px - ox)*sinx + (py - oy)*cosx + oy];
 };
 
 // kanskje mindre bugga
@@ -522,15 +526,15 @@ const eukdiststabil = (ax, ay, bx, by) => Math.sqrt(ax**2 - 2*ax*bx + bx**2 +
 
 const sirkel = (ox, oy, px, py, r = 1.0, d = eukdiststabil) => d(ox, oy, px, py) - r;
 const sirkelrot = (ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
-  let pr = rot(ox, oy, px, py, rad);
+    let pr = rot(ox, oy, px, py, rad);
 
-  return sirkel(ox, oy, pr[0], pr[1], r, d);
+    return sirkel(ox, oy, pr[0], pr[1], r, d);
 };
 
 const rotrot = (f, ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
-  let pr = rot(ox, oy, px, py, rad);
+    let pr = rot(ox, oy, px, py, rad);
 
-  return f(ox, oy, pr[0], pr[1], r, d);
+    return f(ox, oy, pr[0], pr[1], r, d);
 };
 
 const cup = (a, b) => Math.min(a,  b);
@@ -545,24 +549,24 @@ let kuldings = rand(1) ? geomdings : geomdingstre;
 var prev = 0;
 var acct = 0;
 function animasjon(t) {
-  window.requestAnimationFrame(animasjon);
+    window.requestAnimationFrame(animasjon);
 
-  kuldings(t);
-  pushmus();
-  offupdatefunk(t);
+    kuldings(t);
+    pushmus();
+    offupdatefunk(t);
 
-  // ok
-  acct += t - prev;
-  prev = t;
+    // ok
+    acct += t - prev;
+    prev = t;
 
-  if (acct > 110) {
-    ifarge = (ifarge + 1) % kossfarge.length;
-    acct = 0;
+    if (acct > 110) {
+        ifarge = (ifarge + 1) % kossfarge.length;
+        acct = 0;
 
-    if (sulten) {
-      knask();
+        if (sulten) {
+            knask();
+        }
     }
-  }
 };
 
 window.requestAnimationFrame(animasjon);
@@ -577,30 +581,30 @@ const runde = Math.PI;
 const rotmat = [ Math.cos(theta), -Math.sin(theta),
                  Math.sin(theta),  Math.cos(theta) ]
 const rotsanic = (ox, oy, px, py, rad) => {
-  let x = (px - ox);
-  let y = (py - oy);
-  let m = (rad % runde)/theta;
+    let x = (px - ox);
+    let y = (py - oy);
+    let m = (rad % runde)/theta;
 
-  for (let i = 0; i < m; i += 1) {
-    x = x*rotmat[0] + y*rotmat[1];
-    y = x*rotmat[2] + y*rotmat[3];
-  }
+    for (let i = 0; i < m; i += 1) {
+        x = x*rotmat[0] + y*rotmat[1];
+        y = x*rotmat[2] + y*rotmat[3];
+    }
 
-  return [x + ox, y + oy]
+    return [x + ox, y + oy]
 };
 
 window.onresize = () => {
-  // etc
-  ccc = new Celledings(hvorstor, margin);
-  rect = canvas.getBoundingClientRect();
-  // canvas
-  canvas.width  = window.innerWidth;
-  canvas.height = window.innerHeight;
-  // atlas
-  stride = ccc.total;
-  radius = ccc.hvorstor;
-  antall = kossfarge.length;
-  offcanvas.width  = stride*antall;
-  offcanvas.height = stride;
-  atlasfunk();
+    // etc
+    ccc = new Celledings(hvorstor, margin);
+    rect = canvas.getBoundingClientRect();
+    // canvas
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // atlas
+    stride = ccc.total;
+    radius = ccc.hvorstor;
+    antall = kossfarge.length;
+    offcanvas.width  = stride*antall;
+    offcanvas.height = stride;
+    atlasfunk();
 }
