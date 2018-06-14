@@ -43,7 +43,7 @@ class Musedings {
 }
 
 class Celledings {
-  constructor(hvorstor, margin, w, h) {
+  constructor(hvorstor = 4, margin = 2, w = 0, h = 0) {
     this.hvorstor = hvorstor;
     this.margin   = margin;
     this.total    = this.hvorstor + this.margin;
@@ -62,7 +62,8 @@ class Celledings {
     this.fx = new Float32Array(this.alle);
     this.fy = new Float32Array(this.alle);
     this.fr = new Float32Array(this.alle);
-    this.color = new Uint8Array(this.alle);
+    this.ir = new Uint32Array(this.alle);
+    this.farge = new Uint8Array(this.alle);
     this.state = new Uint8Array(this.alle);
 
     for (let i = 0; i < this.alle; i += 1) {
@@ -105,7 +106,7 @@ class Sprite {
 
         nifarge = nifarge || nifarge + 1;
 
-        this.ccc.setcolor(x, y, c ? nifarge : 0);
+        // this.ccc.setfarge(x, y, c ? nifarge : 0);
         this.ccc.setstate(x, y, 2);
       }
     }
@@ -138,7 +139,7 @@ const hexrev = (s) => s.length === 7 ?
 
 const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s)
 
-function lerpcolor(a, b, n = 10) {
+function lerpfarge(a, b, n = 10) {
   let lerp = (abi) => {
     let ret = new Array(n);
     let ai = abi[0];
@@ -169,7 +170,7 @@ const farge = [
   ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
   ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
   ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
-  ["#a1a1a1"]
+//  ["#a1a1a1"]
 ]
 
 const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
@@ -189,7 +190,7 @@ function genfarge(n) {
   let gi = rint(0, 255);
   let bi = rint(0, 255);
 
-  let [ lo,  hi] = [[-100,            -20], [ 20,             100]];
+  let [ lo,  hi] = [[-100,        -20], [  20,        100]];
   let [rlo, rhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
   let [glo, ghi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
   let [blo, bhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
@@ -222,7 +223,7 @@ const mmm = 20;
 const zzz = mmm*2;
 
 var kossfarge = rand(1) ?
-    repfarge(farge[rint(farge.length - 1)], zzz*2 - 1) :
+    repfarge(farge[rand(farge.length - 1)], zzz*2 - 1) :
     fargefunk(genfarge(zzz));
 
 var ifarge = 0;
@@ -241,7 +242,7 @@ function mere() {
     let a = fargefunk(genfarge(zzz)).slice(0, Math.min(zzz*2 - 1, kossfarge.length));
     let b = kossfarge;
 
-    lerpliste = lerpcolor(a, b, 6);
+    lerpliste = lerpfarge(a, b, 6);
     sulten = true;
     istart = ifarge;
   }
@@ -278,6 +279,72 @@ window.addEventListener("keydown", (e) => {
   }
 })
 
+// atlas?
+var offcanvas = document.createElement("canvas");
+let stride = ccc.total;
+let radius = ccc.hvorstor;
+let antall = kossfarge.length;
+offcanvas.width  = stride*antall;
+offcanvas.height = stride;
+
+// // med offset
+// var offctx = offcanvas.getContext("2d", { alpha: true });
+
+// uten offset
+var offctx = offcanvas.getContext("2d", { alpha: false });
+
+offctx.scale(devicePixelRatio, devicePixelRatio);
+
+function atlasfunk() {
+  for (let i = 0; i < antall; i += 1) {
+    offctx.fillStyle = kossfarge[i];
+
+    offctx.beginPath();
+    offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
+    offctx.closePath();
+
+    offctx.fill();
+  }
+}
+
+atlasfunk()
+
+function lerpatlas(i) {
+  let x1 = stride*i;
+  let y1 = 0;
+  let x2 = stride + x1;
+  let y2 = stride;
+  
+  offctx.clearRect(x1, y1, x2, y2);
+  offctx.fillStyle = kossfarge[i];
+  
+  offctx.beginPath();
+  offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
+  offctx.closePath();
+
+  offctx.fill();
+}
+
+var xoff = 0;
+var yoff = 0;
+
+const offupdatefunk = (t) => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  for (let i = 0; i < ccc.alle; i += 1) {
+    if (ccc.state[i] > 0) {
+      let fafafa = ccc.farge[i];
+      let x = ccc.x[i];
+      let y = ccc.y[i];
+      let sc = grense(0.01, ccc.fr[i], radius)
+      
+      ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc + xoff, y - sc + yoff, sc*2, sc*2);
+      
+      ccc.state[i] = 0;
+    }
+  }  
+}
+
 const ctx = canvas.getContext("2d", { alpha: false });
 ctx.scale(devicePixelRatio, devicePixelRatio);
 
@@ -286,11 +353,12 @@ const updatefunk = () => {
 
   for (let i = 0; i < ccc.alle; i += 1) {
     if (ccc.state[i] > 0) {
-      ctx.fillStyle = kossfarge[ccc.color[i]];
+      ctx.fillStyle = kossfarge[ccc.farge[i]];
+      
       ctx.beginPath();
       ctx.arc(ccc.x[i], ccc.y[i], grense(0, ccc.fr[i], ccc.hvorstor), 0, 2*Math.PI);
-      // let roar = grense(0, ccc.fr[i], ccc.hvorstor);
-      // ctx.rect(ccc.x[i] - roar/2, ccc.y[i] - roar/2, roar, roar)
+      ctx.closePath();
+      
       ctx.fill();
 
       ccc.state[i] = 0;
@@ -355,10 +423,10 @@ function geomdingstre(t) {
           ccc.fr[i] = -c;
           
           if (ccc.state[i] === 1) {
-            ccc.color[i] = zzz - 1 - (irip % zzz);
+            ccc.farge[i] = zzz - 1 - (irip % zzz);
             ccc.state[i] = 2;
           } else {
-            ccc.color[i] = irip % zzz;
+            ccc.farge[i] = irip % zzz;
             ccc.state[i] = 1;
           }
         }
@@ -400,10 +468,10 @@ function geomdings(t) {
         ccc.fr[i] = -c;
         
         if (ccc.state[i] === 1) {
-          ccc.color[i] = zzz - 1 - ((k + ifarge) % zzz);
+          ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
           ccc.state[i] = 2;
         } else {
-          ccc.color[i] = (k + ifarge) % zzz;
+          ccc.farge[i] = (k + ifarge) % zzz;
           ccc.state[i] = 1;
         }
       }
@@ -481,7 +549,7 @@ function animasjon(t) {
 
   kuldings(t);
   pushmus();
-  updatefunk();
+  offupdatefunk(t);
 
   // ok
   acct += t - prev;
@@ -522,8 +590,17 @@ const rotsanic = (ox, oy, px, py, rad) => {
 };
 
 window.onresize = () => {
+  // etc
+  ccc = new Celledings(hvorstor, margin);
+  rect = canvas.getBoundingClientRect();
+  // canvas
   canvas.width  = window.innerWidth;
   canvas.height = window.innerHeight;
-  rect = canvas.getBoundingClientRect();
-  ccc = new Celledings(hvorstor, margin);
+  // atlas
+  stride = ccc.total;
+  radius = ccc.hvorstor;
+  antall = kossfarge.length;
+  offcanvas.width  = stride*antall;
+  offcanvas.height = stride;
+  atlasfunk();
 }
