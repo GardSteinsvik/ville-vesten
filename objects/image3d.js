@@ -37,7 +37,7 @@ Image3d.prototype.draw = function (context) {
     context.scale(this.scaleX, this.scaleY);
 
     context.drawImage(this.img, -(this.width/2), -(this.height/2), this.width, this.height);
-    // let kormang = (this.zpos/100 | 0)
+    // let kormang = ((this.zpos/100) | 0)
     // for (let i = 0; i < kormang; i += 1) {
     //         context.drawImage(this.mask, -(this.width/2), -(this.height/2), this.width, this.height);
     // }

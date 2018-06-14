@@ -69,6 +69,7 @@ function drawFrame(t) {
         var amountOfCirclesInGrid = rows*cols;
         images.splice(images.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
     }
+    
     requestAnimationFrame(drawFrame);
 }
 
@@ -136,14 +137,14 @@ function move(object, t) {
         let fax = object.x - mus.x;
         let fay = object.y - mus.y;
         let mod = Math.sqrt(fax**2 + fay**2)/Math.sqrt((window.innerWidth/2)**2 + (window.innerHeight/2)**2)
-        let rot = snorm(Math.atan2(fay, fax) - pi/2 + angle);
+        let rot = (Math.atan2(fay, fax) - pi/2 + angle);
         uhu = rot;
-        let tor = snorm(object.rotation);
+        let tor = (object.rotation);
         var ddd = sflytt(tor, rot); // uhu = ddd;
 
-        // object.rotation = rot
+        object.rotation = rot
         
-        object.rotation += (ddd/(object.zpos/50 + 10));
+        // object.rotation += (ddd/(object.zpos/40 + 28));
         // object.rotation = pi/8*((Math.floor(object.zpos/50) + object.col*object.row) % 16)
         // object.rotation += ddd/100;
         
