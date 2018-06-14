@@ -1,5 +1,17 @@
 "use strict";
 
+// tja
+const KORMANG = 10000;
+var megaindex = 0;
+const megarandom = new Float32Array(KORMANG)
+
+for (let i = 0; i < KORMANG; i += 1) {
+  megarandom[i] = Math.random()
+}
+
+const rand = (a) => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
+const rint = (a, b) => a + rand(b - a);
+
 class Musedings {
   constructor(n) {
     this.musx = new Uint32Array(n);
@@ -57,7 +69,7 @@ class Celledings {
       let x = this.total*(i % this.perrad);
       let y = this.total*Math.floor(i/this.perrad);
 
-      x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
+      // x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
       
       this.x[i] = x;
       this.y[i] = y;
@@ -165,29 +177,29 @@ const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`
 const grense = (a, x, b) => Math.min(Math.max(x, a), b)
 const fargegrense = (x) => grense(0, x, 255);
 const fargefunk = (fff) => fff.concat(fff.slice(0, -1).reverse())
-const wowfarge = (fff) => fff.map(() => fff[_.random(fff.length - 1)])
-const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => fff[_.random(fff.length - 1)])
+const wowfarge = (fff) => fff.map(() => fff[rand(fff.length - 1)])
+const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => fff[rand(fff.length - 1)])
 const repfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => (i % (fff.length*2)) === (i % (fff.length)) ?
                                                                       fff[                  i % fff.length ] :
                                                                       fff[fff.length - 1 - (i % fff.length)])
 
 function genfarge(n) {
   let farger = []
-  let ri = _.random(0, 255);
-  let gi = _.random(0, 255);
-  let bi = _.random(0, 255);
+  let ri = rint(0, 255);
+  let gi = rint(0, 255);
+  let bi = rint(0, 255);
 
   let [ lo,  hi] = [[-100,            -20], [ 20,             100]];
-  let [rlo, rhi] = [_.random(lo[0], lo[1]), _.random(hi[0], hi[1])];
-  let [glo, ghi] = [_.random(lo[0], lo[1]), _.random(hi[0], hi[1])];
-  let [blo, bhi] = [_.random(lo[0], lo[1]), _.random(hi[0], hi[1])];
+  let [rlo, rhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
+  let [glo, ghi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
+  let [blo, bhi] = [rint(lo[0], lo[1]), rint(hi[0], hi[1])];
 
   for (let i = 0; i < n; i += 1) {
     farger.push(rgb(ri, gi, bi))
     
-    ri = fargegrense(ri + _.random(rlo, rhi));
-    gi = fargegrense(gi + _.random(glo, ghi));
-    bi = fargegrense(bi + _.random(blo, bhi));
+    ri = fargegrense(ri + rint(rlo, rhi));
+    gi = fargegrense(gi + rint(glo, ghi));
+    bi = fargegrense(bi + rint(blo, bhi));
   }
 
   return farger;
@@ -209,8 +221,8 @@ const ch = canvas.height;
 const mmm = 20;
 const zzz = mmm*2;
 
-var kossfarge = _.random(1) ?
-    repfarge(farge[_.random(farge.length - 1)], zzz*2 - 1) :
+var kossfarge = rand(1) ?
+    repfarge(farge[rint(farge.length - 1)], zzz*2 - 1) :
     fargefunk(genfarge(zzz));
 
 var ifarge = 0;
@@ -291,13 +303,13 @@ let rect = canvas.getBoundingClientRect();
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
 window.setInterval(
   () => ripplepush(
-    _.random(rect.left, rect.right),
-    _.random(rect.top,  rect.bottom)
+    rint(rect.left, rect.right),
+    rint(rect.top,  rect.bottom)
   ),
   1000
 )
 
-const velgfunk = (ox, oy) => _.random(1) ?
+const velgfunk = (ox, oy) => rand(1) ?
       (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdiststabil) :
       (px, py, r, rad) => sirkelrot(ox, oy, px, py, r, mandist, rad)
 
@@ -306,8 +318,8 @@ const ripplelength = 20;
 const ripplefunk = (ox, oy, r = 0) => ({
   f: velgfunk(ox, oy),
   r: r,
-  rmax: ripplemax, // _.random(200, ripplemax),
-  rot: _.random(10, 300)
+  rmax: ripplemax, // rint(200, ripplemax),
+  rot: rint(10, 300)
 });
 
 let ripple = [];
@@ -461,7 +473,7 @@ const cut = (a, b) =>      cap(a, -b);
 // anim!
 // ~~~~~
 
-let kuldings = _.random(1) ? geomdings : geomdingstre;
+let kuldings = rand(1) ? geomdings : geomdingstre;
 var prev = 0;
 var acct = 0;
 function animasjon(t) {
