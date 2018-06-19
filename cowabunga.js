@@ -273,7 +273,7 @@ function knask() {
 
 // dist fra forrige?
 window.addEventListener("mousemove", hvorerting)
-window.addEventListener("touchmove", hvorerting) 
+window.addEventListener("touchbegin", hvorerting) 
 window.addEventListener("keydown", (e) => {
     switch(e.key) {
     case "p": r += 1; break;
