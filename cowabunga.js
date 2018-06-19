@@ -373,6 +373,7 @@ const updatefunk = () => {
 let rect = canvas.getBoundingClientRect();
 
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
+window.addEventListener("touchstart", (e) => ripplepush(must[0], must[1]))
 window.setInterval(
     () => ripplepush(
         rint(rect.left, rect.right),

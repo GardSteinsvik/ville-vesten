@@ -1,73 +1,73 @@
 <!doctype html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <title>Hey there cowboy</title>
-    <style>
-        #canvas {
-            background-color: #000000;
-        }
-        body {
-            width: 100vw;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-        }
-    </style>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <title>Hey there cowboy</title>
+        <style>
+         #canvas {
+             background-color: #000000;
+         }
+         body {
+             width: 100vw;
+             height: 100vh;
+             margin: 0;
+             overflow: hidden;
+         }
+        </style>
+    </head>
 
-<body style="background-color: #424242">
-    <canvas id="canvas" width="750" height="750"></canvas>
-    <script src="objects/circle.js"></script>
-    <script src="objects/circle3d.js"></script>
-    <script src="objects/image3d.js"></script>
-    <script src="external/lodash.js"></script>
-    <script>
-     var canvas = document.getElementById("canvas");
-     canvas.width = window.innerWidth;
-     canvas.height = window.innerHeight;
-
-     window.onresize = function () {
+    <body style="background-color: #424242">
+        <canvas id="canvas" width="750" height="750"></canvas>
+        <script src="objects/circle.js"></script>
+        <script src="objects/circle3d.js"></script>
+        <script src="objects/image3d.js"></script>
+        <script src="external/lodash.js"></script>
+        <script>
+         var canvas = document.getElementById("canvas");
          canvas.width = window.innerWidth;
          canvas.height = window.innerHeight;
-     };
 
-     var scripts = [
-         'illuminati.js',
-         'colorful_records.js',
-         'black_shapes_surrounded_by_colors.js',
-         'jumping_gradient_balls.js',
-         'enter_pandoras_box.js',
-         'spiral_of_doom.js',
-         'spiral_of_doom_2.js',
-         'hotdiggetydog.js',
-         'cowabunga.js',
-         'experiment.js'
-     ];
+         window.onresize = function () {
+             canvas.width = window.innerWidth;
+             canvas.height = window.innerHeight;
+         };
 
-     loadRandomScript();
-     // loadScript('experiment.js');
+         var scripts = [
+             'illuminati.js',
+             'colorful_records.js',
+             'black_shapes_surrounded_by_colors.js',
+             'jumping_gradient_balls.js',
+             'enter_pandoras_box.js',
+             'spiral_of_doom.js',
+             'spiral_of_doom_2.js',
+             'hotdiggetydog.js',
+             'cowabunga.js',
+             'experiment.js'
+         ];
 
-     function loadRandomScript() {
-         var scriptIndex = Math.floor(Math.random()*scripts.length);
-         loadScript(scripts[scriptIndex]);
-     }
+         loadRandomScript();
+         // loadScript('experiment.js');
 
-     function loadScript(location) {
-         var scriptName = "loaded_script";
-         var js = document.getElementById(scriptName);
-         if(js) {
-             document.body.removeChild(js);
+         function loadRandomScript() {
+             var scriptIndex = Math.floor(Math.random()*scripts.length);
+             loadScript(scripts[scriptIndex]);
          }
 
-         js = document.createElement("script");
-         js.src = location;
-         js.id = scriptName;
-         document.body.appendChild(js);
-         document.title = location.slice(0, -3).replace(/_/g, " ");
-     }
-    </script>
-</body>
+         function loadScript(location) {
+             var scriptName = "loaded_script";
+             var js = document.getElementById(scriptName);
+             if(js) {
+                 document.body.removeChild(js);
+             }
+
+             js = document.createElement("script");
+             js.src = location;
+             js.id = scriptName;
+             document.body.appendChild(js);
+             document.title = location.slice(0, -3).replace(/_/g, " ");
+         }
+        </script>
+    </body>
 
 </html>

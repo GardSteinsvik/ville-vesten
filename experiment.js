@@ -125,6 +125,7 @@ function sflytt(a, b) {
 }
 
 var uhu = 0;
+var drot = 0;
 window.setInterval(() => console.log(uhu), 300);
 
 function move(object, t) {
@@ -138,7 +139,6 @@ function move(object, t) {
         let fay = object.y - mus.y;
         let mod = Math.sqrt(fax**2 + fay**2)/Math.sqrt((window.innerWidth/2)**2 + (window.innerHeight/2)**2)
         let rot = (Math.atan2(fay, fax) - pi/2 + angle);
-        uhu = rot;
         let tor = (object.rotation);
         var ddd = sflytt(tor, rot); // uhu = ddd;
 
