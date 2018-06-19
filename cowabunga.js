@@ -272,7 +272,8 @@ function knask() {
 }
 
 // dist fra forrige?
-window.addEventListener("mousemove", hvorermusa)
+window.addEventListener("mousemove", hvorerting)
+window.addEventListener("touchmove", hvorerting) 
 window.addEventListener("keydown", (e) => {
     switch(e.key) {
     case "p": r += 1; break;
@@ -492,7 +493,7 @@ let mus = new Musedings(mmm);
 let must = new Uint32Array(2);
 must[0] = Math.floor(cw/2);
 must[1] = Math.floor(ch/2);
-function hvorermusa(e) {
+function hvorerting(e) {
     must[0] = e.clientX - rect.left;
     must[1] = e.clientY - rect.top;
 }
