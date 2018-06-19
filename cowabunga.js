@@ -273,7 +273,7 @@ function knask() {
 
 // dist fra forrige?
 window.addEventListener("mousemove", hvorerting)
-window.addEventListener("touchbegin", hvorerting) 
+window.addEventListener("touchmove", (e) => hvorerting(e.touches[0])) 
 window.addEventListener("keydown", (e) => {
     switch(e.key) {
     case "p": r += 1; break;
@@ -298,7 +298,7 @@ offcanvas.height = stride;
 // uten offset
 var offctx = offcanvas.getContext("2d", { alpha: false });
 
-offctx.scale(devicePixelRatio, devicePixelRatio);
+// offctx.scale(devicePixelRatio, devicePixelRatio);
 
 function atlasfunk() {
     for (let i = 0; i < antall; i += 1) {
@@ -312,7 +312,7 @@ function atlasfunk() {
     }
 }
 
-atlasfunk()
+atlasfunk();
 
 function lerpatlas(i) {
     let x1 = stride*i;
@@ -374,7 +374,7 @@ const updatefunk = () => {
 let rect = canvas.getBoundingClientRect();
 
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
-window.addEventListener("touchstart", (e) => ripplepush(must[0], must[1]))
+window.addEventListener("touchend", (e) => ripplepush(must[0], must[1]))
 window.setInterval(
     () => ripplepush(
         rint(rect.left, rect.right),
