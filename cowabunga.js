@@ -595,6 +595,7 @@ const rotsanic = (ox, oy, px, py, rad) => {
     return [x + ox, y + oy]
 };
 
+// skriv en initfunksjon
 window.onresize = () => {
     // etc
     ccc = new Celledings(hvorstor, margin);
