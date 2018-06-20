@@ -271,9 +271,13 @@ function knask() {
     }
 }
 
-// dist fra forrige?
-window.addEventListener("mousemove", hvorerting)
-window.addEventListener("touchmove", (e) => hvorerting(e.touches[0])) 
+// mus og touch
+window.addEventListener("mousemove", hvorerting);
+window.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+    hvorerting(e.touches[0]);
+});
+
 window.addEventListener("keydown", (e) => {
     switch(e.key) {
     case "p": r += 1; break;
@@ -282,7 +286,7 @@ window.addEventListener("keydown", (e) => {
     case "k": s -= 1; break;
     case "a": mere(); break;
     }
-})
+});
 
 // atlas?
 var offcanvas = document.createElement("canvas");
