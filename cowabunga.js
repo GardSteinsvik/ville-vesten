@@ -3,11 +3,7 @@
 // tja
 const KORMANG = 10000;
 var megaindex = 0;
-const megarandom = new Float32Array(KORMANG)
-
-for (let i = 0; i < KORMANG; i += 1) {
-    megarandom[i] = Math.random()
-}
+const megarandom = new Float32Array(KORMANG).map(() => Math.random());
 
 const rand = (a) => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
 const rint = (a, b) => a + rand(b - a);
@@ -271,10 +267,19 @@ function knask() {
     }
 }
 
+const ikkescroll = (e) => {
+    if (e.target === canvas) {
+        e.preventDefault();
+    }
+}
+
+window.addEventListener("touchbegin", ikkescroll, false);
+window.addEventListener("touchmove",  ikkescroll, false);
+window.addEventListener("touchend",   ikkescroll, false);
+
 // mus og touch
 window.addEventListener("mousemove", hvorerting);
 window.addEventListener("touchmove", (e) => {
-    e.preventDefault();
     hvorerting(e.touches[0]);
 });
 
