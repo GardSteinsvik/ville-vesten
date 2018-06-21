@@ -273,9 +273,9 @@ const ikkescroll = (e) => {
     }
 }
 
-window.addEventListener("touchbegin", ikkescroll, false);
-window.addEventListener("touchmove",  ikkescroll, false);
-window.addEventListener("touchend",   ikkescroll, false);
+window.addEventListener("touchstart", ikkescroll, { passive: false });
+window.addEventListener("touchmove",  ikkescroll, { passive: false });
+window.addEventListener("touchend",   ikkescroll, { passive: false });
 
 // mus og touch
 window.addEventListener("mousemove", hvorerting);
@@ -360,7 +360,7 @@ const offupdatefunk = (t) => {
 }
 
 const ctx = canvas.getContext("2d", { alpha: false });
-ctx.scale(devicePixelRatio, devicePixelRatio);
+// ctx.scale(devicePixelRatio, devicePixelRatio);
 
 const updatefunk = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -382,15 +382,21 @@ const updatefunk = () => {
 
 let rect = canvas.getBoundingClientRect();
 
+let touchfunk = (e) => {
+    let xy = woop(e.touches[0]);
+    
+    ripplepush(xy[0], xy[1]);
+}
+
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
-window.addEventListener("touchend", (e) => ripplepush(must[0], must[1]))
-window.setInterval(
-    () => ripplepush(
-        rint(rect.left, rect.right),
-        rint(rect.top,  rect.bottom)
-    ),
-    1000
-)
+window.addEventListener("touchstart", touchfunk)
+// window.setInterval(
+//     () => ripplepush(
+//         rint(rect.left, rect.right),
+//         rint(rect.top,  rect.bottom)
+//     ),
+//     1000
+// )
 
 const velgfunk = (ox, oy) => rand(1) ?
       (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdiststabil) :
@@ -506,6 +512,8 @@ function hvorerting(e) {
     must[0] = e.clientX - rect.left;
     must[1] = e.clientY - rect.top;
 }
+
+const woop = (e) => [e.clientX - rect.left, e.clientY - rect.top];
 
 function pushmus() {
     mus.push(must[0], must[1]);
