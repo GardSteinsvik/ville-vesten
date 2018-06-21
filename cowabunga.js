@@ -212,10 +212,10 @@ const mapkey = (f, o) => Object.keys(o).reduce((ny, k) => {
     return ny;
 }, {});
 
-let hvorstor = 6;
-let margin   = 6;
+let hvorstor = 6*devicePixelRatio;
+let margin   = 6*devicePixelRatio;
 var ccc = new Celledings(hvorstor, margin);
-const sss = new Sprite(varitsprite, 5, 7, ccc);
+// const sss = new Sprite(varitsprite, 5, 7, ccc);
 
 const cw = canvas.width;
 const ch = canvas.height;
