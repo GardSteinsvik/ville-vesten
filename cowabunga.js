@@ -383,9 +383,11 @@ const updatefunk = () => {
 let rect = canvas.getBoundingClientRect();
 
 let touchfunk = (e) => {
-    let xy = woop(e.touches[0]);
-    
-    ripplepush(xy[0], xy[1]);
+    for (let touch of e.touches) {
+        let pirk = woop(touch);
+        
+        ripplepush(pirk[0], pirk[1]);
+    }
 }
 
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
