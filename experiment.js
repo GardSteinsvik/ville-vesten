@@ -22,8 +22,8 @@ function hvorerfingeren(e) {
     if (e.touches.length === 1) {
         hvorermusa(e.touches[0])
     } else {
-        // let y = e.touches[0].clientY;
-        let y = ymean(e.touches);
+        let y = e.touches[0].clientY;
+        // let y = ymean(e.touches);
         let d = Math.abs(yp - y);
         let s = y > yp ? 1 : -1;
         
