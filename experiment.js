@@ -16,12 +16,14 @@ function ikkescroll(e) {
     }
 }
 
+const ymean = (l) => l.reduce((a, b) => a.clientY + b.clientY)/l.length
 let yp = 0;
 function hvorerfingeren(e) {
     if (e.touches.length === 1) {
         hvorermusa(e.touches[0])
     } else {
-        let y = e.touches[0].clientY;
+        // let y = e.touches[0].clientY;
+        let y = ymean(e.touches);
         let d = Math.abs(yp - y);
         let s = y > yp ? 1 : -1;
         
