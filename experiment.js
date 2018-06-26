@@ -16,15 +16,26 @@ function ikkescroll(e) {
     }
 }
 
+let yp = 0;
 function hvorerfingeren(e) {
-    hvorermusa(e.touches[0])
+    if (e.touches.length === 1) {
+        hvorermusa(e.touches[0])
+    } else {
+        let y = e.touches[0].clientY;
+        let d = Math.abs(yp - y);
+        let s = y > yp ? 1 : -1;
+        
+        angle += 0.1*d*s;
+        yp = y;
+    }
 }
 
 window.addEventListener("touchstart", ikkescroll, { passive: false });
 window.addEventListener("touchmove",  ikkescroll, { passive: false });
 window.addEventListener("touchend",   ikkescroll, { passive: false });
 
-window.addEventListener("touchstart touchmove", hvorerfingeren);
+window.addEventListener("touchstart", hvorerfingeren);
+window.addEventListener("touchmove",  hvorerfingeren);
 
 var context = canvas.getContext('2d');
 
@@ -143,7 +154,7 @@ function sflytt(a, b) {
 
 var uhu = 0;
 var drot = 0;
-window.setInterval(() => console.log(uhu), 300);
+// window.setInterval(() => console.log(uhu), 300);
 
 function move(object, t) {
     object.xpos += object.vx;
