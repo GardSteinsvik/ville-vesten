@@ -25,7 +25,7 @@ function hvorerfingeren(e) {
         let d = Math.abs(yp - y);
         let s = y > yp ? 1 : -1;
         
-        angle += 0.1*d*s;
+        angle += 0.01*d*s;
         yp = y;
     }
 }
