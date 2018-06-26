@@ -1,6 +1,4 @@
-window.addEventListener("mousemove", hvorermusa)
-window.addEventListener("mousewheel", (e) => angle += 0.1*e.deltaY/70)
-
+// mus
 let mus  = { x: canvas.width/2, y: canvas.height/2 };
 let rect = canvas.getBoundingClientRect();
 function hvorermusa(e) {
@@ -8,7 +6,26 @@ function hvorermusa(e) {
     mus.y = e.clientY - rect.top;
 }
 
-var canvas = document.getElementById("canvas");
+window.addEventListener("mousemove", hvorermusa)
+window.addEventListener("mousewheel", (e) => angle += 0.1*e.deltaY/70)
+
+// touch
+function ikkescroll(e) {
+    if (e.target === canvas) {
+        e.preventDefault();
+    }
+}
+
+function hvorerfingeren(e) {
+    hvorermusa(e.touches[0])
+}
+
+window.addEventListener("touchstart", ikkescroll, { passive: false });
+window.addEventListener("touchmove",  ikkescroll, { passive: false });
+window.addEventListener("touchend",   ikkescroll, { passive: false });
+
+window.addEventListener("touchstart touchmove", hvorerfingeren);
+
 var context = canvas.getContext('2d');
 
 var requestAnimationFrame = window.requestAnimationFrame
@@ -139,8 +156,8 @@ function move(object, t) {
         let fay = object.y - mus.y;
         let mod = Math.sqrt(fax**2 + fay**2)/Math.sqrt((window.innerWidth/2)**2 + (window.innerHeight/2)**2)
         let rot = (Math.atan2(fay, fax) - pi/2 + angle);
-        let tor = (object.rotation);
-        var ddd = sflytt(tor, rot); // uhu = ddd;
+        // let tor = (object.rotation);
+        // var ddd = sflytt(tor, rot); // uhu = ddd;
 
         object.rotation = rot
         

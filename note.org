@@ -17,3 +17,16 @@
     #+END_EXAMPLE
     gard hadde et enda bedre forslag, som var å benytte masker til farge og firkanter til shading.
     det vil funke som bare det
+** ninjapirk.js
+*** alt
+   ninjanurk
+*** ai
+    følger fingeren
+    a*?
+    hus og sånn? elv?
+    kanskje fiender, så du kan lede ninjaen inn i ting.
+    blir stressa når masse ting skjer
+    stopper opp og ser seg rundt, field of view
+*** fucka pathfinding
+    hindringer, med en labyrint over, som er lovlige trekk.
+    exhaust alternativer og slå ned vegger til det funker.

@@ -45,9 +45,8 @@
              'experiment.js'
          ];
 
-         // loadRandomScript();
+         loadRandomScript();
          // loadScript('experiment.js');
-         loadScript("cowabunga.js");
 
          function loadRandomScript() {
              var scriptIndex = Math.floor(Math.random()*scripts.length);
@@ -57,7 +56,8 @@
          function loadScript(location) {
              var scriptName = "loaded_script";
              var js = document.getElementById(scriptName);
-             if(js) {
+
+             if (js) {
                  document.body.removeChild(js);
              }
 

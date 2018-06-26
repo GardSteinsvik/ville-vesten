@@ -381,9 +381,10 @@ const updatefunk = () => {
 };
 
 let rect = canvas.getBoundingClientRect();
-let touchfunk = (e) => {
+const touchfunk = (e) => {
     for (let touch of e.changedTouches) {
         let pirk = woop(touch);
+
         ripplepush(pirk[0], pirk[1]);
     }
 }
