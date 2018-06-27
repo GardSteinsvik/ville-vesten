@@ -341,7 +341,6 @@ function lerpatlas(i) {
 
 var xoff = 0;
 var yoff = 0;
-
 const offupdatefunk = (t) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -402,7 +401,7 @@ const ripplefunk = (ox, oy, r = 0) => ({
     f: velgfunk(ox, oy),
     r: r,
     rmax: ripplemax, // rint(200, ripplemax),
-    rot: rint(10, 300)
+    rot: rint(1, 56)
 });
 
 let ripple = [];

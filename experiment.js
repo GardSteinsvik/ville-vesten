@@ -83,8 +83,8 @@ function drawFrame(t) {
         move(image, t);
         colorize(image);
         draw(image);
-        
     }
+
     // images.forEach(move);
     // images.forEach(colorize);
     // images.forEach(draw);
@@ -157,28 +157,26 @@ var drot = 0;
 // window.setInterval(() => console.log(uhu), 300);
 
 function move(object, t) {
+    let ttt = t/1000.0;
     object.xpos += object.vx;
     object.ypos += object.vy;
     object.zpos += object.vz;
 
     if (object.zpos > -fl) {
-        var scale = fl/(fl + object.zpos);
         let fax = object.x - mus.x;
         let fay = object.y - mus.y;
-        let mod = Math.sqrt(fax**2 + fay**2)/Math.sqrt((window.innerWidth/2)**2 + (window.innerHeight/2)**2)
-        let rot = (Math.atan2(fay, fax) - pi/2 + angle);
-        // let tor = (object.rotation);
-        // var ddd = sflytt(tor, rot); // uhu = ddd;
+        
+        let dcx = object.x - canvas.width/2;
+        let dcy = object.y - canvas.height/2;
+        let dcn = grense(0, Math.sqrt(dcx**2 + dcy**2), 300);
+        
+        let scale = fl/(fl + object.zpos);
+        let rot = Math.atan2(fay, fax) - pi/2 + angle;
 
-        object.rotation = rot
-        
-        // object.rotation += (ddd/(object.zpos/40 + 28));
-        // object.rotation = pi/8*((Math.floor(object.zpos/50) + object.col*object.row) % 16)
-        // object.rotation += ddd/100;
-        
-        object.scaleX = object.scaleY = scale*dingzz(object.zpos, 200)
+        object.scaleX = object.scaleY = scale*dingzz(object.zpos, 200);
         object.x = vpX + object.xpos*scale*2;
         object.y = vpY + object.ypos*scale*4;
+        object.rotation = rot
         object.visible = true;
     } else {
         object.visible = false;
