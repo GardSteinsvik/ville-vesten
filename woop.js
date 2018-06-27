@@ -88,8 +88,13 @@ const xy = (e) => ({
 });
 
 
-let touchfunk = (e) => e.changedTouches.map((t) => rrr.push(xy(t)))
-let mousefunk = (e) => rrr.push(xy(e))
+const mousefunk = (e) => rrr.push(xy(e));
+const touchfunk = (e) => {
+    for (let touch of e.changedTouches) {
+        rrr.push(xy(touch));
+    }
+};
+
 window.addEventListener("touchstart", touchfunk)
 window.addEventListener("mousedown",  mousefunk)
 
