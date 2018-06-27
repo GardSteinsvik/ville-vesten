@@ -24,7 +24,7 @@ function hvorerfingeren(e) {
         let y = e.touches[0].clientY;
         let d = Math.abs(yp - y);
         let s = y > yp ? 1 : -1;
-        
+
         angle += 0.01*d*s;
         yp = y;
     }
@@ -53,7 +53,7 @@ var colors = [
     '#ffe454'
 ];
 
-let pi = Math.PI;
+const pi = Math.PI;
 var angle = 0;
 const MAX_Z      = 2000;
 const MIN_RADIUS = 0;
@@ -97,7 +97,7 @@ function drawFrame(t) {
         var amountOfCirclesInGrid = rows*cols;
         images.splice(images.length - amountOfCirclesInGrid, amountOfCirclesInGrid);
     }
-    
+
     requestAnimationFrame(drawFrame);
 }
 
@@ -143,7 +143,7 @@ function wowdist(a, b, c = 2*pi) {
 }
 
 function snorm(x) {
-    return x + 2*pi*Math.round(x/(2*pi))
+    return (2*pi + x) % (2*pi)
 }
 
 function sflytt(a, b) {
@@ -152,10 +152,9 @@ function sflytt(a, b) {
     return Math.min(2*pi - b + a, b - a)*d
 }
 
-var uhu = 0;
 var drot = 0;
-// window.setInterval(() => console.log(uhu), 300);
-
+var uhu = 0;
+window.setInterval(() => console.log(uhu), 600);
 function move(object, t) {
     let ttt = t/1000.0;
     object.xpos += object.vx;
@@ -165,18 +164,14 @@ function move(object, t) {
     if (object.zpos > -fl) {
         let fax = object.x - mus.x;
         let fay = object.y - mus.y;
-        
-        let dcx = object.x - canvas.width/2;
-        let dcy = object.y - canvas.height/2;
-        let dcn = grense(0, Math.sqrt(dcx**2 + dcy**2), 300);
-        
+
         let scale = fl/(fl + object.zpos);
-        let rot = Math.atan2(fay, fax) - pi/2 + angle;
+        let rot = snorm(Math.atan2(fay, fax) - pi/2 + angle); uhu = rot;
 
         object.scaleX = object.scaleY = scale*dingzz(object.zpos, 200);
         object.x = vpX + object.xpos*scale*2;
         object.y = vpY + object.ypos*scale*4;
-        object.rotation = rot
+        object.rotation = rot;
         object.visible = true;
     } else {
         object.visible = false;
