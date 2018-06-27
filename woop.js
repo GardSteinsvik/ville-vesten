@@ -26,12 +26,17 @@ const farge = ([
     ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
     ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
     ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
-])[rand(3)]
+])[rand(3)];
 
+const velgfunk = ([
+    () => 1,
+    () => 0,
+    () => rand(1)
+])[rand(2)];
 
 class Ripple {
     constructor({x, y}) {
-        this.funk = rand(1) ? circlefunk(x, y) : squarefunk(x, y);
+        this.funk = velgfunk() ? circlefunk(x, y) : squarefunk(x, y);
         this.rmax = rint(100, 300);
         this.inc  = 1.6*Math.random() + 1;
         this.r = 0;
