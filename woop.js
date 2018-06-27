@@ -21,20 +21,26 @@ const squarefunk = (x, y) => (r, rot) => {
     ctx.restore();
 }
 
-const farge = ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"]
+const farge = ([
+    ["#ef3b2c", "#cb181d", "#a50f15", "#a50f15", "#a50f15", "#67000d", "#67000d", "#67000d"],
+    ["#793FCF", "#DF2AAC", "#FF4B80", "#FF885C", "#FFC350", "#F9F871"],
+    ["#ED5E93", "#FF737F", "#FF916D", "#FFB360"],
+    ["#ACACAC", "#999CA1", "#828E95", "#6A8086", "#537372", "#43655A"],
+])[rand(3)]
+
 
 class Ripple {
     constructor({x, y}) {
         this.funk = rand(1) ? circlefunk(x, y) : squarefunk(x, y);
         this.rmax = rint(100, 300);
-        this.inc  = 2*Math.random() + 1;
+        this.inc  = 1.6*Math.random() + 1;
         this.r = 0;
         this.k = 0;
         this.x = x;
         this.y = y;
         this.rot = 0;
         this.rotdir = (-1)**rand(1);
-        this.rotinc = 0.05*Math.random() + 0.001;
+        this.rotinc = 0.028*Math.random() + 0.001;
         this.locoff = 100*Math.random()*this.rotdir;
         this.color = farge[rand(farge.length - 1)];
         this.rd = 0;
@@ -52,7 +58,7 @@ class Ripple {
             ctx.fill("evenodd")
         }
 
-        let wowr = this.inc*Math.sin(t + this.locoff) + this.inc;
+        let wowr = 0.5*this.inc*Math.sin(t + this.locoff) + this.inc;
         
         this.r += wowr;
         this.rot += this.rotinc*this.rotdir*wowr
