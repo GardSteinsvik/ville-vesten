@@ -9,13 +9,6 @@ function hvorermusa(e) {
 window.addEventListener("mousemove", hvorermusa)
 window.addEventListener("mousewheel", (e) => angle += 0.1*e.deltaY/70)
 
-// touch
-function ikkescroll(e) {
-    if (e.target === canvas) {
-        e.preventDefault();
-    }
-}
-
 let yp = 0;
 function hvorerfingeren(e) {
     if (e.touches.length === 1) {
@@ -29,10 +22,6 @@ function hvorerfingeren(e) {
         yp = y;
     }
 }
-
-window.addEventListener("touchstart", ikkescroll, { passive: false });
-window.addEventListener("touchmove",  ikkescroll, { passive: false });
-window.addEventListener("touchend",   ikkescroll, { passive: false });
 
 window.addEventListener("touchstart", hvorerfingeren);
 window.addEventListener("touchmove",  hvorerfingeren);

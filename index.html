@@ -22,10 +22,20 @@
         <script src="objects/circle3d.js"></script>
         <script src="objects/image3d.js"></script>
         <script src="external/lodash.js"></script>
-        <script>
+        <script>         
          var canvas = document.getElementById("canvas");
          canvas.width = window.innerWidth;
          canvas.height = window.innerHeight;
+
+         const ikkescroll = (e) => {
+             if (e.target === canvas) {
+                 e.preventDefault();
+             }
+         }
+
+         window.addEventListener("touchstart", ikkescroll, { passive: false });
+         window.addEventListener("touchmove",  ikkescroll, { passive: false });
+         window.addEventListener("touchend",   ikkescroll, { passive: false });
 
          window.onresize = function () {
              canvas.width = window.innerWidth;

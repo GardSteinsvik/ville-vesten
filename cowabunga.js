@@ -267,16 +267,6 @@ function knask() {
     }
 }
 
-const ikkescroll = (e) => {
-    if (e.target === canvas) {
-        e.preventDefault();
-    }
-}
-
-window.addEventListener("touchstart", ikkescroll, { passive: false });
-window.addEventListener("touchmove",  ikkescroll, { passive: false });
-window.addEventListener("touchend",   ikkescroll, { passive: false });
-
 // mus og touch
 window.addEventListener("mousemove", hvorerting);
 window.addEventListener("touchmove", (e) => {
