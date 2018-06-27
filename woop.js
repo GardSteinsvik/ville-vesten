@@ -100,6 +100,7 @@ window.addEventListener("mousedown",  mousefunk)
 
 let rrr = new RippleDings(50);
 let ctx = canvas.getContext("2d", { alpha: false });
+ctx.globalCompositeOperation = (["multiply", "xor"])[rand(1)];
 
 function update(t) {
     window.requestAnimationFrame(update);
