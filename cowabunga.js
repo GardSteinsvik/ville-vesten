@@ -381,7 +381,9 @@ const touchfunk = (e) => {
 window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
 window.addEventListener("touchstart", touchfunk)
 
-const velgfunk = (ox, oy) => rand(1) ?
+// uhui
+const megafunk = ([() => 0, () => 1, () => rand(1)])[grense(0, rand(8), 2)]
+const velgfunk = (ox, oy) => megafunk() ?
       (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdiststabil) :
       (px, py, r, rad) => sirkelrot(ox, oy, px, py, r, mandist, rad)
 
