@@ -6,7 +6,7 @@
 A='(function () {'
 B='})();'
 
-[[ -d "release "]] || mkdir "./release"
+mkdir -p "./release"
 
 for dings in *.js; do
     cat <( echo "${A}" ) \
