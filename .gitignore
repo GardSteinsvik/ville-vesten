@@ -1,0 +1,15 @@
+# build
+release/
+
+# mac
+._*
+.Trashes
+.DS_Store
+.fseventsd
+.LSOverride
+.AppleDouble
+.Spotlight-V100
+.TemporaryItems
+.VolumeIcon.icns
+.DocumentRevisions-V100
+.com.apple.timemachine.donotpresent

@@ -3,9 +3,6 @@ var context = canvas.getContext('2d');
 
 var angle = 0;
 
-
-
-
 var requestAnimationFrame = window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.webkitRequestAnimationFrame ||

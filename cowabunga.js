@@ -369,6 +369,36 @@ const updatefunk = () => {
     }
 };
 
+function geomdingsfire(t) {
+    let nais = t/500.0;
+    let rmod = r + 1;
+    mus.fyll(oxs, oys);
+
+    for (let k = mmm - 1; k > 0; k -= 1) {
+        for (let i = 0; i < ccc.state.length; i += 1) {
+            let krot = (-1)**k*nais*3/(k + 1.0);
+            let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
+            let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, eukdiststabil);
+            let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          eukdiststabil);
+            // let c = cut(x, y);
+            // let c = strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], Math.sin(nais/100)**2*50);
+            let c = cap(cut(x, y), strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], 100 + 75*Math.sin(nais/10)));
+
+            if (c <= 0.0) {
+                ccc.fr[i] = -c;
+                
+                if (ccc.state[i] === 1) {
+                    ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
+                    ccc.state[i] = 2;
+                } else {
+                    ccc.farge[i] = (k + ifarge) % zzz;
+                    ccc.state[i] = 1;
+                }
+            }
+        }
+    }
+}
+
 let rect = canvas.getBoundingClientRect();
 const touchfunk = (e) => {
     for (let touch of e.changedTouches) {
@@ -535,6 +565,11 @@ const sirkelrot = (ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
     return sirkel(ox, oy, pr[0], pr[1], r, d);
 };
 
+const yhalv = (ox, oy, px, py) => py - oy
+const xhalv = (ox, oy, px, py) => px - ox
+const strek = (ox, oy, px, py, b) => cut(yhalv(px, py + b/2, ox, oy),
+                                         yhalv(px, py - b/2, ox, oy))
+
 const rotrot = (f, ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
     let pr = rot(ox, oy, px, py, rad);
 
@@ -549,7 +584,7 @@ const cut = (a, b) =>      cap(a, -b);
 // anim!
 // ~~~~~
 
-let kuldings = rand(1) ? geomdings : geomdingstre;
+let kuldings = ([geomdings, geomdingstre, geomdingsfire])[rand(2)];
 var prev = 0;
 var acct = 0;
 function animasjon(t) {
