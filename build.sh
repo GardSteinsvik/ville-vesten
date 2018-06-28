@@ -10,6 +10,6 @@ mkdir -p "./release"
 
 for dings in *.js; do
     cat <( echo "${A}" ) \
-        dings \
+        "${dings}" \
         <( echo "${B}" ) > "./release/${dings}"
 done
