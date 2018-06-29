@@ -584,7 +584,7 @@ const cut = (a, b) =>      cap(a, -b);
 // anim!
 // ~~~~~
 
-let kuldings = ([geomdings, geomdingstre, geomdingsfire])[rand(2)];
+let kuldings = ([geomdings, geomdingstre, geomdingsfire])[grense(0, rand(27), 27)]; // rand(2) TODO: skriv en funksjon som v8 inliner, const plukkplis(l) => l[rand(l.length - 1)]
 var prev = 0;
 var acct = 0;
 function animasjon(t) {
