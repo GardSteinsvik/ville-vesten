@@ -5,8 +5,9 @@ const KORMANG = 10000;
 var megaindex = 0;
 const megarandom = new Float32Array(KORMANG).map(() => Math.random());
 
-const rand = (a) => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
+const rand = (a)    => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
 const rint = (a, b) => a + rand(b - a);
+const velg = (l)    => l[rand(l.length - 1)];
 
 class Musedings {
     constructor(n) {
@@ -76,38 +77,15 @@ class Celledings {
     }
 }
 
-const varitsprite = [1, 0, 0, 0, 0,
-                     0, 2, 2, 0, 6,
-                     3, 2, 2, 6, 6,
-                     4, 4, 4, 6, 0,
-                     0, 4, 5, 5, 5,
-                     0, 0, 5, 5, 5,
-                     0, 0, 0, 0, 5];
+const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s);
+const rgbrev   = (s) => s.slice(s.indexOf('(') + 1, -1).split(',').map(x => parseInt(x, 10));
+const hexrev   = (s) => s.length === 7 ?
+      s.slice(1).match(/.{2}/g).map(x => parseInt(x,     16)) :
+      s.slice(1).match(/.{1}/g).map(x => parseInt(x + x, 16))
 
-class Sprite {
-    constructor(data, width, height, ccc) {
-        this.data = data;
-        this.width = width;
-        this.height = height;
-        this.ccc = ccc;
-    }
-
-    draw(ox = 0, oy = 0) {
-        for (let i = 0; i < this.height; i += 1) {
-            for (let j = 0; j < this.width; j += 1) {
-                let x = j + ox;
-                let y = i + oy;
-                let c = this.data[i*this.width + j]*14;
-                var nifarge = (c + ifarge) % kossfarge.length;
-
-                nifarge = nifarge || nifarge + 1;
-
-                // this.ccc.setfarge(x, y, c ? nifarge : 0);
-                this.ccc.setstate(x, y, 2);
-            }
-        }
-    }
-}
+const zip  = (a, b) => a.length <= b.length ?
+      a.map((aaaa, i) => [aaaa, b[i]]) :
+      b.map((bbbb, i) => [a[i], bbbb])
 
 // tar to sett a, b med farger der både a og b er av lengde m
 // og et heltall n, og lager en matrise m x n
@@ -127,17 +105,6 @@ class Sprite {
 //  j = floor(n/2)
 //
 // der ai og bi er den i-te fargen i hvert sitt sett, og xi er fargen omtrent halvveis mellom ai og bi.
-
-const rgbrev = (s) => s.slice(s.indexOf('(') + 1, -1).split(',').map(x => parseInt(x, 10));
-const hexrev = (s) => s.length === 7 ?
-      s.slice(1).match(/.{2}/g).map(x => parseInt(x,     16)) :
-      s.slice(1).match(/.{1}/g).map(x => parseInt(x + x, 16))
-
-const fargerev = (s) => s[0] === "#" ? hexrev(s) : rgbrev(s);
-const zip  = (a, b) => a.length <= b.length ?
-      a.map((aaaa, i) => [aaaa, b[i]]) :
-      b.map((bbbb, i) => [a[i], bbbb])
-
 
 function lerpfarge(a, b, n = 10) {
     let lerp = (abi) => {
@@ -175,11 +142,11 @@ const farge = [
 
 const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
 const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`
-const grense = (a, x, b) => Math.min(Math.max(x, a), b)
+const grense = (a, x, b) => Math.min(Math.max(a, x), b)
 const fargegrense = (x) => grense(0, x, 255);
 const fargefunk = (fff) => fff.concat(fff.slice(0, -1).reverse())
-const wowfarge = (fff) => fff.map(() => fff[rand(fff.length - 1)])
-const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => fff[rand(fff.length - 1)])
+const wowfarge = (fff) => fff.map(() => velg(fff))
+const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => velg(fff))
 const repfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => (i % (fff.length*2)) === (i % (fff.length)) ?
                                                                       fff[                  i % fff.length ] :
                                                                       fff[fff.length - 1 - (i % fff.length)])
@@ -215,7 +182,6 @@ const mapkey = (f, o) => Object.keys(o).reduce((ny, k) => {
 let hvorstor = 6*devicePixelRatio;
 let margin   = 6*devicePixelRatio;
 var ccc = new Celledings(hvorstor, margin);
-// const sss = new Sprite(varitsprite, 5, 7, ccc);
 
 const cw = canvas.width;
 const ch = canvas.height;
@@ -223,7 +189,7 @@ const mmm = 20;
 const zzz = mmm*2;
 
 var kossfarge = rand(1) ?
-    repfarge(farge[rand(farge.length - 1)], zzz*2 - 1) :
+    repfarge(velg(farge), zzz*2 - 1) :
     fargefunk(genfarge(zzz));
 
 var ifarge = 0;
@@ -254,7 +220,10 @@ function knask() {
     let tygg = lerpliste[ifargern].pop();
 
     if (tygg) {
+        // kan egentlig droppe kossfarge,
+        // men kanskje greit å ha både atlas og hex?
         kossfarge[ifargern] = tygg;
+        lerpatlas(ifargern);
         itest = 0;
     } else if (ifargern === istart) {
         itest += 1;
@@ -267,10 +236,22 @@ function knask() {
     }
 }
 
-// mus og touch
+// mus
 window.addEventListener("mousemove", hvorerting);
+
+// touch
+// window.addEventListener("touchstart", (e) => {
+//     hvorerting(e.touches[0]);
+// });
 window.addEventListener("touchmove", (e) => {
     hvorerting(e.touches[0]);
+});
+
+let dtouch = { x: 0, y: 0 }
+window.addEventListener("touchmove", (e) => {
+    if (e.touches.length >= 2) {
+        // UHUI TIME TO PLAY TOMBI
+    }
 });
 
 window.addEventListener("keydown", (e) => {
@@ -283,16 +264,13 @@ window.addEventListener("keydown", (e) => {
     }
 });
 
-// atlas?
+// atlas
 var offcanvas = document.createElement("canvas");
 let stride = ccc.total;
 let radius = ccc.hvorstor;
 let antall = kossfarge.length;
 offcanvas.width  = stride*antall;
 offcanvas.height = stride;
-
-// // med offset
-// var offctx = offcanvas.getContext("2d", { alpha: true });
 
 // uten offset
 var offctx = offcanvas.getContext("2d", { alpha: false });
@@ -314,12 +292,9 @@ function atlasfunk() {
 atlasfunk();
 
 function lerpatlas(i) {
-    let x1 = stride*i;
-    let y1 = 0;
-    let x2 = stride + x1;
-    let y2 = stride;
+    if (i > (antall - 1)) { console.log(i); }
     
-    offctx.clearRect(x1, y1, x2, y2);
+    offctx.clearRect(i*stride, 0, stride, stride);
     offctx.fillStyle = kossfarge[i];
     
     offctx.beginPath();
@@ -329,8 +304,6 @@ function lerpatlas(i) {
     offctx.fill();
 }
 
-var xoff = 0;
-var yoff = 0;
 const offupdatefunk = (t) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -341,7 +314,7 @@ const offupdatefunk = (t) => {
             let y = ccc.y[i];
             let sc = grense(0.01, ccc.fr[i], radius)
             
-            ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc + xoff, y - sc + yoff, sc*2, sc*2);
+            ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc, y - sc, sc*2, sc*2);
             
             ccc.state[i] = 0;
         }
@@ -369,20 +342,20 @@ const updatefunk = () => {
     }
 };
 
-function geomdingsfire(t) {
-    let nais = t/500.0;
+function geomdingstre(t) {
+    let ttt = t/500.0;
     let rmod = r + 1;
     mus.fyll(oxs, oys);
 
     for (let k = mmm - 1; k > 0; k -= 1) {
         for (let i = 0; i < ccc.state.length; i += 1) {
-            let krot = (-1)**k*nais*3/(k + 1.0);
+            let krot = (-1)**k*ttt*3/(k + 1.0);
             let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
             let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, eukdiststabil);
             let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          eukdiststabil);
             // let c = cut(x, y);
-            // let c = strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], Math.sin(nais/100)**2*50);
-            let c = cap(cut(x, y), strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], 100 + 75*Math.sin(nais/10)));
+            // let c = strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], Math.sin(ttt/100)**2*50);
+            let c = cap(cut(x, y), strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], 100 + 75*Math.sin(ttt/10)));
 
             if (c <= 0.0) {
                 ccc.fr[i] = -c;
@@ -412,7 +385,7 @@ window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
 window.addEventListener("touchstart", touchfunk)
 
 // uhui
-const megafunk = ([() => 0, () => 1, () => rand(1)])[grense(0, rand(8), 2)]
+const megafunk = velg([() => 0, () => 1, () => rand(1)]);
 const velgfunk = (ox, oy) => megafunk() ?
       (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdiststabil) :
       (px, py, r, rad) => sirkelrot(ox, oy, px, py, r, mandist, rad)
@@ -440,15 +413,15 @@ const ripplepush = (ox, oy) => {
     }
 }
 
-function geomdingstre(t) {
-    let nais = t/600.0;
+function geomdingsto(t) {
+    let ttt = t/600.0;
 
     for (let i = 0; i < ccc.state.length; i += 1) {
         for (let irip = 0; irip < ripplelength; irip += 1) {
             let rip = ripple[irip];
 
             if (rip.r < rip.rmax) {
-                let rrot = (-1)**rip.rot*nais*10.0/(rip.rot + 1.0);
+                let rrot = (-1)**rip.rot*ttt*10.0/(rip.rot + 1.0);
                 let ra = rip.r;
                 let rb = rip.r - 300.0*(((rip.rmax - rip.r)/(rip.rmax))**2)
                 let x = rip.f(ccc.fx[i], ccc.fy[i], ra, rrot)
@@ -475,26 +448,18 @@ function geomdingstre(t) {
     }
 }
 
-function geomdingstsu(t) {
-    let [mx, my] = mus.fetch(0);
-    let wowx = Math.floor(mx/ccc.total - sss.width/2);
-    let wowy = Math.floor(my/ccc.total - sss.height/2);
-
-    sss.draw(wowx, wowy)
-}
-
 var s = 0.0;
 var oxs = new Uint32Array(mmm);
 var oys = new Uint32Array(mmm);
 var bredde = 28.0;
 function geomdings(t) {
-    let nais = t/500.0;
+    let ttt = t/500.0;
     let rmod = r + 1;
     mus.fyll(oxs, oys);
 
     for (let k = mmm - 1; k > 0; k -= 1) {
         for (let i = 0; i < ccc.state.length; i += 1) {
-            let krot = (-1)**k*nais/(k + 1.0);
+            let krot = (-1)**k*ttt/(k + 1.0);
             let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
             let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, mandist);
             let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          mandist);
@@ -584,7 +549,7 @@ const cut = (a, b) =>      cap(a, -b);
 // anim!
 // ~~~~~
 
-let kuldings = ([geomdings, geomdingstre, geomdingsfire])[grense(0, rand(27), 2)]; // rand(2) TODO: skriv en funksjon som v8 inliner, const plukkplis(l) => l[rand(l.length - 1)]
+let kuldings = velg([geomdings, geomdingsto, geomdingstre]);
 var prev = 0;
 var acct = 0;
 function animasjon(t) {

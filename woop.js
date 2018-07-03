@@ -2,10 +2,10 @@ const KORMANG = 10000;
 var megaindex = 0;
 const megarandom = new Float32Array(KORMANG).map(() => Math.random());
 
-const rand = (a) => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
+const rand = (a)    => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
 const rint = (a, b) => a + rand(b - a);
 
-const grense = (a, x, b) => Math.min(Math.max(x, a), b)
+const grense = (a, x, b) => Math.min(Math.max(a, x), b)
 
 const circlefunk = (x, y) => (r, rot) => {    
     ctx.arc(x, y, r, 0, Math.PI*2);
@@ -56,18 +56,18 @@ class Ripple {
             ctx.fillStyle = this.color;
             
             ctx.beginPath();
-            this.funk(this.r, this.rot)
-            this.funk(this.k, this.rot)
+            this.funk(this.r, this.rot);
+            this.funk(this.k, this.rot);
             ctx.closePath();
             
-            ctx.fill("evenodd")
+            ctx.fill("evenodd");
         }
 
         let wowr = 0.5*this.inc*Math.sin(t + this.locoff) + this.inc;
         
         this.r += wowr;
-        this.rot += this.rotinc*this.rotdir*wowr
-        this.k = this.r*(1 - (this.rmax - this.r)/this.rmax)
+        this.rot += this.rotinc*this.rotdir*wowr;
+        this.k = this.r*(1 - (this.rmax - this.r)/this.rmax);
     }
 }
 
