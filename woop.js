@@ -179,8 +179,6 @@ let clear = velg([
 
 console.log(ctx.globalCompositeOperation);
 
-window.setInterval(() => console.log(ctx.globalCompositeOperation), 1000)
-
 function update(t) {
     window.requestAnimationFrame(update);
     clear();
