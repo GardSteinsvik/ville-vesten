@@ -81,7 +81,7 @@ class Ripple {
         this.y = y;
         this.rot = 0;
         this.rotdir = (-1)**rand(1);
-        this.rotinc = 0.056*Math.random() + 0.0001;
+        this.rotinc = 0.09*Math.random() + 0.0001;
         this.locoff = 100*Math.random()*this.rotdir;
         this.color = velg(kossfarge);
         this.rd = 0;
