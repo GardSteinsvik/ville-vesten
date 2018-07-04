@@ -141,9 +141,6 @@ function sflytt(a, b) {
     return Math.min(2*pi - b + a, b - a)*d
 }
 
-var drot = 0;
-var uhu = 0;
-window.setInterval(() => console.log(uhu), 600);
 function move(object, t) {
     let ttt = t/1000.0;
     object.xpos += object.vx;
@@ -155,7 +152,7 @@ function move(object, t) {
         let fay = object.y - mus.y;
 
         let scale = fl/(fl + object.zpos);
-        let rot = snorm(Math.atan2(fay, fax) - pi/2 + angle); uhu = rot;
+        let rot = snorm(Math.atan2(fay, fax) - pi/2 + angle);
 
         object.scaleX = object.scaleY = scale*dingzz(object.zpos, 200);
         object.x = vpX + object.xpos*scale*2;

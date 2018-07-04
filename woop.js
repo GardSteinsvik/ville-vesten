@@ -35,11 +35,11 @@ const velgfunk = ([
 ])[rand(2)];
 
 class Ripple {
-    constructor({x, y}) {
+    constructor({x, y, rmax, r}) {
         this.funk = velgfunk() ? circlefunk(x, y) : squarefunk(x, y);
-        this.rmax = rint(100, 300);
         this.inc  = 1.6*Math.random() + 1;
-        this.r = 0;
+        this.rmax = rmax || rint(100, 300);
+        this.r    = r    || 0;
         this.k = 0;
         this.x = x;
         this.y = y;
@@ -71,12 +71,9 @@ class Ripple {
     }
 }
 
-const deadripple = new Ripple(0, 0);
-deadripple.r = deadripple.rmax + 10;
-
-class RippleDings {
+class Rippledings {
     constructor(length) {
-        this.ripples = new Array(length).fill(0).map(() => { let r = new Ripple(0, 0); r.r = r.rmax + 10; return r });
+        this.ripples = new Array(length).fill(0).map(() => new Ripple({x: 0, y: 0, rmax: -1, r: 1}));
         this.length = length;
         this.index = 0;
     }
@@ -109,7 +106,7 @@ const touchfunk = (e) => {
 window.addEventListener("touchstart", touchfunk)
 window.addEventListener("mousedown",  mousefunk)
 
-let rrr = new RippleDings(50);
+let rrr = new Rippledings(50);
 let ctx = canvas.getContext("2d", { alpha: false });
 ctx.globalCompositeOperation = (["multiply", "xor"])[rand(1)];
 

@@ -1,11 +1,10 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-var requestAnimationFrame = window.requestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.msRequestAnimationFrame;
-
+var requestAnimationFrame = window.requestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.msRequestAnimationFrame;
 
 var colorIndex = 0;
 var colors = [

@@ -13,7 +13,7 @@ const cos = Math.cos;
 //          .
 //  { i: 40, f: op }]
 
-class Celledings {
+class Celledingz {
     constructor(hvorstor, margin, w, h) {
         this.hvorstor = hvorstor;
         this.margin   = margin;
@@ -51,7 +51,7 @@ class Celledings {
 
 let size   = 10;
 let margin =  2;
-var ccc = new Celledings(size, margin);
+var ccc = new Celledingz(size, margin);
 const rrr = 6.0;
 const ctx = canvas.getContext("2d", { alpha: false })
 
@@ -163,5 +163,5 @@ window.onresize = () => {
     canvas.width  = window.innerWidth;
     canvas.height = window.innerHeight;
     rect = canvas.getBoundingClientRect();
-    ccc = new Celledings(size, margin);
+    ccc = new Celledingz(size, margin);
 }
