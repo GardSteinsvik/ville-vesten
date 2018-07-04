@@ -375,9 +375,7 @@ function geomdingstre(t) {
 let rect = canvas.getBoundingClientRect();
 const touchfunk = (e) => {
     for (let touch of e.changedTouches) {
-        let pirk = woop(touch);
-
-        ripplepush(pirk[0], pirk[1]);
+        ripplepush(woopx(touch), woopy(touch));
     }
 }
 
@@ -489,11 +487,12 @@ let must = new Uint32Array(2);
 must[0] = Math.floor(cw/2);
 must[1] = Math.floor(ch/2);
 function hvorerting(e) {
-    must[0] = e.clientX - rect.left;
-    must[1] = e.clientY - rect.top;
+    must[0] = woopx(e);
+    must[1] = woopy(e);
 }
 
-const woop = (e) => [e.clientX - rect.left, e.clientY - rect.top];
+const woopx = ({clientX:x}) => x - rect.left;
+const woopy = ({clientY:y}) => y - rect.top;
 
 function pushmus() {
     mus.push(must[0], must[1]);
