@@ -22,10 +22,13 @@
         <script src="objects/circle3d.js"></script>
         <script src="objects/image3d.js"></script>
         <script src="external/lodash.js"></script>
-        <script>         
+        <script>
          var canvas = document.getElementById("canvas");
          canvas.width = window.innerWidth;
          canvas.height = window.innerHeight;
+
+         // TODO: flytt disse til util/cooltools.js
+         const inni = (a, t, b) => (a < t) && (t < b);
 
          const ikkescroll = (e) => {
              if (e.target === canvas) {
@@ -33,15 +36,68 @@
              }
          }
 
+         const bytt = (k) => {
+             let n = (scriptIndex + scripts.length + k) % scripts.length;
+             let { protocol, host } = location;
+             let url = `${protocol}//${host}/?${n}`;
+
+             !(n >= 0) || window.open(url, "_self");
+         }
+
+         // kanskje benytt e.changedTouches?
+         const touchbytt = (e) => {
+             if (e.touches.length > 3) {
+                 let { width:w, height:h } = canvas;
+                 let s = 27*devicePixelRatio;
+                 let nw = {x: 0, y: 0};
+                 let ne = {x: w, y: 0};
+                 let tnw = false;
+                 let tne = false;
+                 let bot = 0;
+
+                 let [a0, b0] = [h - s, h];
+                 
+                 for (let touch of e.touches) {
+                     bot += inni(a0, e.clientY, b0);
+                 }
+
+                 let [a1, b1] = [    0, s];
+                 let [a2, b2] = [w - s, w];
+
+                 for (let touch of e.changedTouches) {
+                     tnw = tnw || (inni(a1, touch.clientX, b1) && inni(a1, touch.clientY, b1));
+                     tne = tne || (inni(a2, touch.clientX, b2) && inni(a1, touch.clientY, b1));
+                 }
+
+                 // xor kinda
+                 let retning = tnw*-1 + tne*+1;
+
+                 !(bot >= 2) && !retning || bytt(retning);
+             }
+         }
+
+         const tastbytt = (e) => {
+             switch (e.key) {
+                 case ",": bytt(-1); break;
+                 case ".": bytt(+1); break;
+             }
+         }
+
+         const resize = () => {
+             canvas.width  = window.innerWidth;
+             canvas.height = window.innerHeight;
+         }
+
          window.addEventListener("touchstart", ikkescroll, { passive: false });
          window.addEventListener("touchmove",  ikkescroll, { passive: false });
          window.addEventListener("touchend",   ikkescroll, { passive: false });
 
-         window.onresize = function () {
-             canvas.width = window.innerWidth;
-             canvas.height = window.innerHeight;
-         };
-         
+         window.addEventListener("touchstart", touchbytt);
+         window.addEventListener("keydown",    tastbytt);
+
+         window.addEventListener("resize", resize);
+
+
          var scripts = [
              'illuminati.js',
              'colorful_records.js',
@@ -56,27 +112,31 @@
              'woop.js'
          ];
 
-         loadRandomScript();
+         let scriptIndex = +(argumentScript() || randomScript());
+
+         loadScript(scripts[scriptIndex]);
+
          // loadScript('cowabunga.js');
 
-         function loadRandomScript() {
-             var scriptIndex = Math.floor(Math.random()*scripts.length);
-             loadScript(scripts[scriptIndex]);
+         function argumentScript() {
+             let url = window.location.href;
+             let idx = url.indexOf("?") + 1;
+             let scriptIndex = idx ? url.slice(idx) : "";
+
+             return scriptIndex;
          }
 
-         function loadScript(location) {
-             var scriptName = "loaded_script";
-             var js = document.getElementById(scriptName);
+         function randomScript() {
+             let scriptIndex = Math.floor(Math.random()*scripts.length);
 
-             if (js) {
-                 document.body.removeChild(js);
-             }
+             return scriptIndex;
+         }
 
+         function loadScript(name) {
              js = document.createElement("script");
-             js.src = location;
-             js.id = scriptName;
+             js.src = name;
              document.body.appendChild(js);
-             document.title = location.slice(0, -3).replace(/_/g, " ");
+             document.title = name.slice(0, -3).replace(/_/g, " ");
          }
         </script>
     </body>

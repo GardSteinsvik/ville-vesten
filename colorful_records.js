@@ -1,9 +1,6 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext('2d');
 
-
-
-
 var angle = 0;
 
 var requestAnimationFrame = window.requestAnimationFrame ||
@@ -33,33 +30,33 @@ function drawCircle() {
         clearPos = -5;
     }
 
-    // draw the circle
-    context.beginPath();
-
-    var radius = 10 + 40 * Math.abs(Math.cos(angle));
+    var radius = 10 + 40*Math.abs(Math.cos(angle));
 
     if (radius <= 15) {
-
         var k = 8;
 
-        xpos += Math.random() * radius * k - radius * k/2;
-        ypos += Math.random() * radius * k - radius * k/2;
+        xpos += Math.random()*radius*k - radius*k/2;
+        ypos += Math.random()*radius*k - radius*k/2;
 
         if (xpos < radius) {
             xpos = radius;
         }
+        
         if (xpos > canvas.width - radius) {
             xpos = canvas.width - radius;
         }
+        
         if (ypos < radius) {
             ypos = radius;
         }
+        
         if (ypos > canvas.height - radius) {
             ypos = canvas.height - radius;
         }
     }
 
-    // context.rect(0,0, 100, 100);
+    // draw the circle
+    context.beginPath();
     context.arc(xpos, ypos, radius, 0, Math.PI * 2, false);
     context.closePath();
 
@@ -87,9 +84,8 @@ function getRandomColor() {
 
 function nextColor(color) {
     color = color.substr(1, 6);
-    var letters = '0123456789ABCDEF';
     var colorType = (2 * Math.floor(Math.random() * 3)) + 2;
-
+    var letters = '0123456789ABCDEF';
     var newColor = '#';
 
     for (var i = 0; i < 6; i++) {
@@ -100,16 +96,19 @@ function nextColor(color) {
             newColor += letters[colorIndex];
         }
     }
+    
     return newColor;
 }
 
 function nextSmoothColor(color) {
     var letters = '0123456789abcdef';
     var newColor = '#';
+    
     for (var i = 0; i < color.length; i++) {
         if (color.charAt(i) === '#') continue;
         var nextIndex = (letters.indexOf(color.charAt(i)) + 1) % letters.length;
         newColor += letters[nextIndex];
     }
+    
     return newColor;
 }

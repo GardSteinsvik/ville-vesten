@@ -255,7 +255,7 @@ window.addEventListener("touchmove", (e) => {
 });
 
 window.addEventListener("keydown", (e) => {
-    switch(e.key) {
+    switch (e.key) {
     case "p": r += 1; break;
     case "o": r -= 1; break;
     case "l": s += 1; break;
