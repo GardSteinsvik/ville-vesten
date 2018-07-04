@@ -135,8 +135,7 @@ function updatefunk(t) {
                 }
             }
         }
-    }
-    
+    }    
 }
 
 function animasjon(t) {
