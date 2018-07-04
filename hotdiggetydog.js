@@ -1,5 +1,14 @@
 "use strict";
 
+const KORMANG = 10000;
+var megaindex = 0;
+const megarandom = new Float32Array(KORMANG).map(() => Math.random());
+
+const rand = (a)    => (a + 1)*megarandom[++megaindex % KORMANG] | 0;
+const rint = (a, b) => a + rand(b - a);
+
+const grense = (a, x, b) => Math.min(Math.max(a, x), b);
+
 // eh
 const pi = Math.PI;
 const sin = Math.sin;
@@ -42,15 +51,15 @@ class Celledingz {
             
             this.x[i] = x;
             this.y[i] = y;
-            this.r[i] = _.random(0, 255);
-            this.g[i] = _.random(0, 255);
-            this.b[i] = _.random(0, 255);
+            this.r[i] = rint(0, 255);
+            this.g[i] = rint(0, 255);
+            this.b[i] = rint(0, 255);
         }
     }
 }
 
-let size   = 10;
-let margin =  2;
+let size   = 10 + 5*grense(0, devicePixelRatio, 2);
+let margin =  2 +   grense(0, devicePixelRatio, 2);
 var ccc = new Celledingz(size, margin);
 const rrr = 6.0;
 const ctx = canvas.getContext("2d", { alpha: false })
@@ -68,18 +77,21 @@ let rect = canvas.getBoundingClientRect();
 let must = new Uint32Array(2);
 must[0] = Math.floor(canvas.width/2);
 must[1] = Math.floor(canvas.height/2);
-function hvorermusa(e) {
-    must[0] = e.clientX - rect.left;
-    must[1] = e.clientY - rect.top;
+function hvorerting(e) {
+    must[0] = woopx(e);
+    must[1] = woopy(e);
 }
+
+const woopx = ({clientX:x}) => x - rect.left;
+const woopy = ({clientY:y}) => y - rect.top;
+
 
 var rz = 0;
 var gz = 0;
 var bz = 0;
 
-const grense = (a, x, b) => Math.min(Math.max(a, x), b);
 const rgb = (r, g, b) => `rgb(${r}, ${g}, ${b})`
-const rfunk = (r, a = -5, b = 5) => Math.round(grense(0, r + _.random(a, b), 255));
+const rfunk = (r, a = -5, b = 5) => Math.round(grense(0, r + rint(a, b), 255));
 const fargefunk = (i) => rgb(ccc.r[i] = rfunk(ccc.r[i]),
                              ccc.g[i] = rfunk(ccc.g[i]),
                              ccc.b[i] = rfunk(ccc.b[i]))
@@ -133,7 +145,9 @@ function animasjon(t) {
 }
 
 window.requestAnimationFrame(animasjon);
-window.addEventListener("mousemove", hvorermusa)
+window.addEventListener("mousemove", hvorerting)
+window.addEventListener("touchmove", (e) => hvorerting(e.touches[0]));
+
 
 const mandist = (ax, ay, bx, by) => Math.abs(ax - bx) + Math.abs(ay - by);
 const rot = (ox, oy, px, py, rad) => {
