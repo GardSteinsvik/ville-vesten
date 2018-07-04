@@ -145,8 +145,6 @@ const rgba = (r, g, b, a) => `rgba(${r}, ${g}, ${b}, ${a})`
 const grense = (a, x, b) => Math.min(Math.max(a, x), b)
 const fargegrense = (x) => grense(0, x, 255);
 const fargefunk = (fff) => fff.concat(fff.slice(0, -1).reverse())
-const wowfarge = (fff) => fff.map(() => velg(fff))
-const zapfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => velg(fff))
 const repfarge = (fff, lll = 10) => (new Array(lll)).fill("#fff").map((o, i) => (i % (fff.length*2)) === (i % (fff.length)) ?
                                                                       fff[                  i % fff.length ] :
                                                                       fff[fff.length - 1 - (i % fff.length)])
