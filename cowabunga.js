@@ -179,8 +179,8 @@ const mapkey = (f, o) => Object.keys(o).reduce((ny, k) => {
     return ny;
 }, {});
 
-let hvorstor = 6*devicePixelRatio;
-let margin   = 6*devicePixelRatio;
+let hvorstor = 6*grense(0, devicePixelRatio, 2);
+let margin   = 6*grense(0, devicePixelRatio, 2);
 var ccc = new Celledings(hvorstor, margin);
 
 const cw = canvas.width;
