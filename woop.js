@@ -74,7 +74,7 @@ class Ripple {
     constructor({x, y, rmax, r}) {
         this.funk = velgfunk() ? circlefunk(x, y) : squarefunk(x, y);
         this.inc  = 1.6*Math.random() + 1;
-        this.rmax = rmax || rint(100, 200 + 100*devicePixelRatio);
+        this.rmax = rmax || rint(100, 200 + 280*devicePixelRatio);
         this.r    = r    || 0;
         this.k = 0;
         this.x = x;
