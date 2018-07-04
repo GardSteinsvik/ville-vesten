@@ -58,8 +58,8 @@ class Celledingz {
     }
 }
 
-let size   = 10 + 5*grense(0, devicePixelRatio, 2);
-let margin =  2 +   grense(0, devicePixelRatio, 2);
+let size   = 10 + 4*grense(0, devicePixelRatio - 1, 2);
+let margin =  2
 var ccc = new Celledingz(size, margin);
 const rrr = 6.0;
 const ctx = canvas.getContext("2d", { alpha: false })
@@ -70,6 +70,7 @@ function sirkeldings(x, y, r, color = "#fff") {
     // ctx.rect(x, y, r, r)
     ctx.beginPath();
     ctx.arc(x, y, r, 0.0, end);
+    ctx.closePath();
     ctx.fill();
 }
 
@@ -82,9 +83,8 @@ function hvorerting(e) {
     must[1] = woopy(e);
 }
 
-const woopx = ({clientX:x}) => x - rect.left;
-const woopy = ({clientY:y}) => y - rect.top;
-
+const woopx = ({ clientX:x }) => x - rect.left;
+const woopy = ({ clientY:y }) => y - rect.top;
 
 var rz = 0;
 var gz = 0;

@@ -491,8 +491,8 @@ function hvorerting(e) {
     must[1] = woopy(e);
 }
 
-const woopx = ({clientX:x}) => x - rect.left;
-const woopy = ({clientY:y}) => y - rect.top;
+const woopx = ({ clientX:x }) => x - rect.left;
+const woopy = ({ clientY:y }) => y - rect.top;
 
 function pushmus() {
     mus.push(must[0], must[1]);
