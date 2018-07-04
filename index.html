@@ -57,22 +57,22 @@
 
                  let [a0, b0] = [h - s, h];
                  
-                 for (let touch of e.touches) {
-                     bot += inni(a0, e.clientY, b0);
+                 for (let { clientY:y } of e.touches) {
+                     bot += inni(a0, y, b0);
                  }
 
                  let [a1, b1] = [    0, s];
                  let [a2, b2] = [w - s, w];
 
-                 for (let touch of e.changedTouches) {
-                     tnw = tnw || (inni(a1, touch.clientX, b1) && inni(a1, touch.clientY, b1));
-                     tne = tne || (inni(a2, touch.clientX, b2) && inni(a1, touch.clientY, b1));
+                 for (let { clientX:x, clientY:y } of e.changedTouches) {
+                     tnw = tnw || (inni(a1, x, b1) && inni(a1, y, b1));
+                     tne = tne || (inni(a2, x, b2) && inni(a1, y, b1));
                  }
 
                  // xor kinda
                  let retning = tnw*-1 + tne*+1;
 
-                 !(bot >= 2) && !retning || bytt(retning);
+                 !(bot >= 2 && retning) || bytt(retning);
              }
          }
 
