@@ -127,29 +127,30 @@ class Rippledings {
 
 let rrr = new Rippledings(50);
 
-var opindex = 0;
 const ops = ["source-over", "xor", "hard-light"];
+var opindex = rand(ops.length) - 1;
 
 let ctx = canvas.getContext("2d", { alpha: false });
 ctx.clearRect(0, 0, canvas.width, canvas.height);
-ctx.globalCompositeOperation = velg(ops);
+ctx.globalCompositeOperation = ops[opindex];
 
 const xy = (e) => ({
     x: e.clientX - rect.left,
     y: e.clientY - rect.top
 });
 
+const vent = velg([(s) => s, (s) => rint(s, s + 400)]) 
 const rep = async (f, n, s = 0) => {
     f();
 
     return !n || new Promise(resolve => {
         setTimeout(() => {
             rep(f, n - 1, s)
-        }, s)
+        }, vent(s))
     });
 }
 
-const kulfunk = (kor) => rep(() => rrr.push(kor), rand(5) + 1, 300);
+const kulfunk = (kor) => rep(() => rrr.push(kor), rand(8) + 1, 300);
 
 kulfunk({ x: canvas.width/2, y: canvas.height/2 });
 
@@ -163,7 +164,7 @@ let effect = window.setInterval(
 
         kulfunk(her)
     },
-    1600
+    2800
 )
 
 const dereg     = (e) => window.clearInterval(effect);
