@@ -53,7 +53,7 @@ class Celledings {
         this.perrad = Math.ceil(this.cw/this.total) + 1;
         this.perkol = Math.ceil(this.ch/this.total) + 1;
         this.alle = this.perrad*this.perkol;
-        
+
         this.x = new Int32Array(this.alle);
         this.y = new Int32Array(this.alle);
         this.fx = new Float32Array(this.alle);
@@ -68,7 +68,7 @@ class Celledings {
             let y = this.total*Math.floor(i/this.perrad);
 
             // x -= Math.floor(i/this.perrad) % 2 ? Math.round(this.total/2) : 0;
-            
+
             this.x[i] = x;
             this.y[i] = y;
             this.fx[i] = x;
@@ -162,7 +162,7 @@ function genfarge(n) {
 
     for (let i = 0; i < n; i += 1) {
         farger.push(rgb(ri, gi, bi))
-        
+
         ri = fargegrense(ri + rint(rlo, rhi));
         gi = fargegrense(gi + rint(glo, ghi));
         bi = fargegrense(bi + rint(blo, bhi));
@@ -234,23 +234,8 @@ function knask() {
     }
 }
 
-// mus
+window.addEventListener("touchmove", (e) => hvorerting(e.touches[0]));
 window.addEventListener("mousemove", hvorerting);
-
-// touch
-// window.addEventListener("touchstart", (e) => {
-//     hvorerting(e.touches[0]);
-// });
-window.addEventListener("touchmove", (e) => {
-    hvorerting(e.touches[0]);
-});
-
-let dtouch = { x: 0, y: 0 }
-window.addEventListener("touchmove", (e) => {
-    if (e.touches.length >= 2) {
-        // UHUI TIME TO PLAY TOMBI
-    }
-});
 
 window.addEventListener("keydown", (e) => {
     switch (e.key) {
@@ -291,10 +276,10 @@ atlasfunk();
 
 function lerpatlas(i) {
     if (i > (antall - 1)) { console.log(i); }
-    
+
     offctx.clearRect(i*stride, 0, stride, stride);
     offctx.fillStyle = kossfarge[i];
-    
+
     offctx.beginPath();
     offctx.arc(stride*i + radius, radius, radius, 0, 2*Math.PI);
     offctx.closePath();
@@ -304,19 +289,19 @@ function lerpatlas(i) {
 
 const offupdatefunk = (t) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
+
     for (let i = 0; i < ccc.alle; i += 1) {
         if (ccc.state[i] > 0) {
             let fafafa = ccc.farge[i];
             let x = ccc.x[i];
             let y = ccc.y[i];
             let sc = grense(0.01, ccc.fr[i], radius)
-            
+
             ctx.drawImage(offcanvas, fafafa*stride, 0, stride, stride, x - sc, y - sc, sc*2, sc*2);
-            
+
             ccc.state[i] = 0;
         }
-    }  
+    }
 }
 
 const ctx = canvas.getContext("2d", { alpha: false });
@@ -328,11 +313,11 @@ const updatefunk = () => {
     for (let i = 0; i < ccc.alle; i += 1) {
         if (ccc.state[i] > 0) {
             ctx.fillStyle = kossfarge[ccc.farge[i]];
-            
+
             ctx.beginPath();
             ctx.arc(ccc.x[i], ccc.y[i], grense(0, ccc.fr[i], ccc.hvorstor), 0, 2*Math.PI);
             ctx.closePath();
-            
+
             ctx.fill();
 
             ccc.state[i] = 0;
@@ -349,15 +334,13 @@ function geomdingstre(t) {
         for (let i = 0; i < ccc.state.length; i += 1) {
             let krot = (-1)**k*ttt*3/(k + 1.0);
             let pr = rot(oxs[mmm - k], oys[mmm - k], ccc.fx[i], ccc.fy[i], krot);
-            let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, eukdiststabil);
-            let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          eukdiststabil);
-            // let c = cut(x, y);
-            // let c = strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], Math.sin(ttt/100)**2*50);
+            let x = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s + bredde, eukdist);
+            let y = sirkel(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], k*rmod + 10.0*s,          eukdist);
             let c = cap(cut(x, y), strek(oxs[mmm - k], oys[mmm - k], pr[0], pr[1], 100 + 75*Math.sin(ttt/10)));
 
             if (c <= 0.0) {
                 ccc.fr[i] = -c;
-                
+
                 if (ccc.state[i] === 1) {
                     ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
                     ccc.state[i] = 2;
@@ -370,28 +353,40 @@ function geomdingstre(t) {
     }
 }
 
-let rect = canvas.getBoundingClientRect();
+const dereg     = (e) => window.clearInterval(effect);
 const touchfunk = (e) => {
     for (let touch of e.changedTouches) {
         ripplepush(woopx(touch), woopy(touch));
     }
 }
 
-window.addEventListener("mousedown", () => ripplepush(must[0], must[1]))
-window.addEventListener("touchstart", touchfunk)
+let effect = window.setInterval(
+  () => ripplepush(
+      rint(rect.left, rect.right),
+      rint(rect.top,  rect.bottom)
+  ),
+    1000
+);
+
+// disable effect
+window.addEventListener("touchstart", dereg);
+window.addEventListener("mousedown",  dereg);
+// interaction
+window.addEventListener("touchstart", touchfunk);
+window.addEventListener("mousedown", () => ripplepush(must[0], must[1]));
 
 // uhui
 const megafunk = velg([() => 0, () => 1, () => rand(1)]);
 const velgfunk = (ox, oy) => megafunk() ?
-      (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdiststabil) :
+      (px, py, r, rad) => sirkel(ox, oy, px, py, r, eukdist) :
       (px, py, r, rad) => sirkelrot(ox, oy, px, py, r, mandist, rad)
 
-const ripplemax = 500.0;
+const ripplemax = 600.0;
 const ripplelength = 20;
 const ripplefunk = (ox, oy, r = 0) => ({
     f: velgfunk(ox, oy),
     r: r,
-    rmax: ripplemax, // rint(200, ripplemax),
+    rmax: rint(200, ripplemax),
     rot: rint(1, 56)
 });
 
@@ -426,7 +421,7 @@ function geomdingsto(t) {
 
                 if (c <= 0.0) {
                     ccc.fr[i] = -c;
-                    
+
                     if (ccc.state[i] === 1) {
                         ccc.farge[i] = zzz - 1 - (irip % zzz);
                         ccc.state[i] = 2;
@@ -463,7 +458,7 @@ function geomdings(t) {
 
             if (c <= 0.0) {
                 ccc.fr[i] = -c;
-                
+
                 if (ccc.state[i] === 1) {
                     ccc.farge[i] = zzz - 1 - ((k + ifarge) % zzz);
                     ccc.state[i] = 2;
@@ -506,8 +501,9 @@ const eledist = (ax, ay, bx, by, eps = 0.5) => (Math.abs(ax - bx) < eps) ?
 const maidist = (ax, ay, bx, by, eps = 0.1) => ((Math.abs(ax - bx) < eps) && (Math.abs(ay - by) < eps)) ?
       0 :
       Math.sqrt(ax**2 + ay**2) + Math.sqrt(bx**2 + by**2)
-const eukdist = (ax, ay, bx, by) => Math.sqrt((ax - bx)**2.0 + (ay - by)**2.0);
+const eukdist = (ax, ay, bx, by) => Math.sqrt(ax**2 - 2*ax*bx + bx**2 + ay**2 - 2*ay*by + by**2);
 const mandist = (ax, ay, bx, by) => Math.abs(ax - bx) + Math.abs(ay - by);
+
 const rot = (ox, oy, px, py, rad) => {
     let cosx = Math.cos(rad);
     let sinx = Math.sin(rad);
@@ -516,12 +512,8 @@ const rot = (ox, oy, px, py, rad) => {
             (px - ox)*sinx + (py - oy)*cosx + oy];
 };
 
-// kanskje mindre bugga
-const eukdiststabil = (ax, ay, bx, by) => Math.sqrt(ax**2 - 2*ax*bx + bx**2 +
-                                                    ay**2 - 2*ay*by + by**2);
-
-const sirkel = (ox, oy, px, py, r = 1.0, d = eukdiststabil) => d(ox, oy, px, py) - r;
-const sirkelrot = (ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
+const sirkel    = (ox, oy, px, py, r = 1.0, d = eukdist)            => d(ox, oy, px, py) - r;
+const sirkelrot = (ox, oy, px, py, r = 1.0, d = eukdist, rad = 0.0) => {
     let pr = rot(ox, oy, px, py, rad);
 
     return sirkel(ox, oy, pr[0], pr[1], r, d);
@@ -531,12 +523,6 @@ const yhalv = (ox, oy, px, py) => py - oy
 const xhalv = (ox, oy, px, py) => px - ox
 const strek = (ox, oy, px, py, b) => cut(yhalv(px, py + b/2, ox, oy),
                                          yhalv(px, py - b/2, ox, oy))
-
-const rotrot = (f, ox, oy, px, py, r = 1.0, d = eukdiststabil, rad = 0.0) => {
-    let pr = rot(ox, oy, px, py, rad);
-
-    return f(ox, oy, pr[0], pr[1], r, d);
-};
 
 const cup = (a, b) => Math.min(a,  b);
 const cap = (a, b) => Math.max(a,  b);
@@ -572,41 +558,15 @@ function animasjon(t) {
 
 window.requestAnimationFrame(animasjon);
 
-// viser seg at dette er en blanding av bugga og tregt
-// tror det kan være raskere, gitt at
-// jeg snekrer sammen noen kule matrisegreier
-// <<-- og -->>
-// opererer med mindre floats
-const theta = 0.1;
-const runde = Math.PI;
-const rotmat = [ Math.cos(theta), -Math.sin(theta),
-                 Math.sin(theta),  Math.cos(theta) ]
-const rotsanic = (ox, oy, px, py, rad) => {
-    let x = (px - ox);
-    let y = (py - oy);
-    let m = (rad % runde)/theta;
-
-    for (let i = 0; i < m; i += 1) {
-        x = x*rotmat[0] + y*rotmat[1];
-        y = x*rotmat[2] + y*rotmat[3];
-    }
-
-    return [x + ox, y + oy]
-};
-
-// skriv en initfunksjon
-window.onresize = () => {
-    // etc
+window.addEventListener("resize", () => {
     ccc = new Celledings(hvorstor, margin);
-    rect = canvas.getBoundingClientRect();
-    // canvas
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    // atlas
     stride = ccc.total;
     radius = ccc.hvorstor;
     antall = kossfarge.length;
     offcanvas.width  = stride*antall;
     offcanvas.height = stride;
     atlasfunk();
-}
+})
+
+// init
+ripplepush(canvas.width/2, canvas.height/2);

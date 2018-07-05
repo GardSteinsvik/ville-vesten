@@ -27,6 +27,8 @@
          canvas.width = window.innerWidth;
          canvas.height = window.innerHeight;
 
+         let rect = canvas.getBoundingClientRect();
+
          // TODO: flytt disse til util/cooltools.js
          const inni = (a, t, b) => (a < t) && (t < b);
 
@@ -46,10 +48,11 @@
 
          const touchbytt = (e) => {
              if (e.touches.length > 3) {
+             // if (e.touches.length > 0) { // DEBUG
                  let { width:w, height:h } = canvas;
-                 let s = 40*devicePixelRatio;
-                 let nw = {x: 0, y: 0};
-                 let ne = {x: w, y: 0};
+                 let s = 56*devicePixelRatio;
+                 let nw = { x: 0, y: 0 };
+                 let ne = { x: w, y: 0 };
                  let tnw = false;
                  let tne = false;
                  let bot = 0;
@@ -72,6 +75,7 @@
                  let retning = tnw*-1 + tne*+1;
 
                  !(bot >= 2 && retning) || bytt(retning);
+                 // !(true && retning) || bytt(retning); // DEBUG
              }
          }
 
@@ -85,6 +89,7 @@
          const resize = () => {
              canvas.width  = window.innerWidth;
              canvas.height = window.innerHeight;
+             rect = canvas.getBoundingClientRect();
          }
 
          window.addEventListener("touchstart", ikkescroll, { passive: false });

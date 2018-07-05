@@ -1,6 +1,5 @@
 // mus
 let mus  = { x: canvas.width/2, y: canvas.height/2 };
-let rect = canvas.getBoundingClientRect();
 function hvorermusa(e) {
     mus.x = e.clientX - rect.left;
     mus.y = e.clientY - rect.top;

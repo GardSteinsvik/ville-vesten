@@ -74,7 +74,6 @@ function sirkeldings(x, y, r, color = "#fff") {
     ctx.fill();
 }
 
-let rect = canvas.getBoundingClientRect();
 let must = new Uint32Array(2);
 must[0] = Math.floor(canvas.width/2);
 must[1] = Math.floor(canvas.height/2);
@@ -172,9 +171,6 @@ const cup = (a, b) => Math.min(a,  b);
 const cap = (a, b) => Math.max(a,  b);
 const cut = (a, b) =>      cap(a, -b);
 
-window.onresize = () => {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    rect = canvas.getBoundingClientRect();
+window.addEventListener("resize", () => {
     ccc = new Celledingz(size, margin);
-}
+});

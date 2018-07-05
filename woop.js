@@ -74,7 +74,7 @@ class Ripple {
     constructor({x, y, rmax, r}) {
         this.funk = velgfunk() ? circlefunk(x, y) : squarefunk(x, y);
         this.inc  = 1.6*Math.random() + 1;
-        this.rmax = rmax || rint(100, 200 + 160*devicePixelRatio);
+        this.rmax = rmax || rint(100, 400 + 210*(devicePixelRatio - 1));
         this.r    = r    || 0;
         this.k = 0;
         this.x = x;
@@ -125,15 +125,48 @@ class Rippledings {
     }
 }
 
-let rect = canvas.getBoundingClientRect();
+let rrr = new Rippledings(50);
+
+var opindex = 0;
+const ops = ["source-over", "xor", "hard-light"];
+
+let ctx = canvas.getContext("2d", { alpha: false });
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.globalCompositeOperation = velg(ops);
+
 const xy = (e) => ({
     x: e.clientX - rect.left,
     y: e.clientY - rect.top
 });
 
-var opindex = 0;
-const ops = ["source-over", "xor", "hard-light"];
+const rep = async (f, n, s = 0) => {
+    f();
 
+    return !n || new Promise(resolve => {
+        setTimeout(() => {
+            rep(f, n - 1, s)
+        }, s)
+    });
+}
+
+const kulfunk = (kor) => rep(() => rrr.push(kor), rand(5) + 1, 300);
+
+kulfunk({ x: canvas.width/2, y: canvas.height/2 });
+
+// kanskje velg neste i nærheten av forrige
+let effect = window.setInterval(
+    () => {
+        let her = {
+            x: rint(rect.left, rect.right),
+            y: rint(rect.top,  rect.bottom)
+        }
+
+        kulfunk(her)
+    },
+    1600
+)
+
+const dereg     = (e) => window.clearInterval(effect);
 const keyfunk   = (e) => !(e.key === "n") || (ctx.globalCompositeOperation = ops[opindex++ % ops.length]);
 const mousefunk = (e) => rrr.push(xy(e));
 const touchfunk = (e) => {
@@ -142,19 +175,13 @@ const touchfunk = (e) => {
     }
 };
 
+// disable effect
+window.addEventListener("touchstart", dereg);
+window.addEventListener("mousedown",  dereg);
+// interaction
 window.addEventListener("touchstart", touchfunk);
 window.addEventListener("mousedown",  mousefunk);
-window.addEventListener("keydown",    keyfunk)
-
-let rrr = new Rippledings(50);
-let ctx = canvas.getContext("2d", { alpha: false });
-
-
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-// ctx.fillStyle = rand(1) ? "black" : "white";
-// ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-ctx.globalCompositeOperation = velg(ops);
+window.addEventListener("keydown",    keyfunk);
 
 const faderate = 0.028*Math.random() + 0.006;
 let clear = velg([
@@ -176,8 +203,6 @@ let clear = velg([
     // // persist
     // () => {}
 ]);
-
-console.log(ctx.globalCompositeOperation);
 
 function update(t) {
     window.requestAnimationFrame(update);
