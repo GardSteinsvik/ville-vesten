@@ -25,7 +25,7 @@ function hvorerfingeren(e) {
 window.addEventListener("touchstart", hvorerfingeren);
 window.addEventListener("touchmove",  hvorerfingeren);
 
-canvas.style.backgroundColor = "white"
+//canvas.style.backgroundColor = "white"
 var context = canvas.getContext('2d');
 
 var requestAnimationFrame = window.requestAnimationFrame
@@ -40,12 +40,6 @@ var colors = [
     '#46daff',
     '#ff3856',
     '#ffe454'
-];
-
-const colorColaxes = [
-    'rosacolax.png',
-    'gulcolax.png',
-    'cyancolax.png'
 ];
 
 const pi = Math.PI;
@@ -69,7 +63,7 @@ drawFrame(0);
 function drawFrame(t) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    // angle += .05;
+    angle += .05;
 
     vpX = canvas.width / 2;
     vpY = canvas.height / 2;
@@ -107,7 +101,7 @@ function generateObjects() {
         for (var j = 0; j < rows; j++) {
             ypos += canvas.height/(rows + 1);
 
-            let image = new Image3d('images/colax.png', 'images/gulcolax.png');
+            let image = new Laks3d();
             image.xpos = xpos;
             image.ypos = ypos;
             image.zpos = MAX_Z;
@@ -125,13 +119,13 @@ function grense(a, x, b) { return Math.min(Math.max(a, x), b) }
 function dingzz(z, m = 500) { return grense(0, (MAX_Z - z), m)/m }
 
 function sign(x)    { return x >=  0 ?  1 :
-                      /* */            -1 }
+    /* */            -1 }
 function wowsign(x) { return x >   0 ?  1 :
-                      /* */  x === 0 ?  0 :
-                      /* */            -1 }
+    /* */  x === 0 ?  0 :
+        /* */            -1 }
 
 function wowdist(a, b, c = 2*pi) {
-    let z = Math.abs(b - a) % c
+    let z = Math.abs(b - a) % c;
     let x = c - z;
 
     return z < x ? z : -x;
@@ -153,6 +147,8 @@ function move(object, t) {
     object.ypos += object.vy;
     object.zpos += object.vz;
 
+    object.skewFactor = Math.sin(angle);
+
     if (object.zpos > -fl) {
         let fax = object.x - mus.x;
         let fay = object.y - mus.y;
@@ -172,7 +168,8 @@ function move(object, t) {
 
 function colorize(object) {
     if (object.zpos % 100 === 0) {
-        object.mask.src = 'images/' + colorColaxes[Math.abs(object.zpos) % colorColaxes.length];
+        const colorIndex = Math.floor(Math.random() * Laks3d.laksColorList.length);
+        object.mask.src = 'images/laks/' + Laks3d.laksColorList[colorIndex];
     }
 }
 

@@ -22,6 +22,7 @@
         <script src="objects/circle.js"></script>
         <script src="objects/circle3d.js"></script>
         <script src="objects/image3d.js"></script>
+        <script src="objects/laks3d.js"></script>
         <script>
          var canvas = document.getElementById("canvas");
          canvas.width = window.innerWidth;
@@ -113,7 +114,8 @@
              'hotdiggetydog.js',
              'cowabunga.js',
              'experiment.js',
-             'woop.js'
+             'woop.js',
+             'discolaks.js'
          ];
 
          let scriptIndex = +(argumentScript() || randomScript());
@@ -124,6 +126,7 @@
 
          function argumentScript() {
              let url = window.location.href;
+             console.log(url)
              let idx = url.indexOf("?") + 1;
              let scriptIndex = idx ? url.slice(idx) : "";
 
